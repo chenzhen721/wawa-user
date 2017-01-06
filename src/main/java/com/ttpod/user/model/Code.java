@@ -21,6 +21,7 @@ public interface Code {
     Integer 手机号格式错误 = 30432;
     Integer 短信验证码无效 = 30431;
     Integer 手机号码已存在 = 30433;
+    Integer 邮箱已存在 = 30434;
     Integer 短信验证间隔太短 = 30435;
     Integer 手机号码不存在 = 30436;
     Integer 短信验证码每日次数超过限制 = 30437;

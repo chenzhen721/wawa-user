@@ -72,7 +72,7 @@ public abstract class BaseController extends ControllerSupport7 {
 
     public static final BasicDBObject USER_FIELD = new BasicDBObject("token",1).append("pwd",1);
 
-    private static final String MM_KEY = "aiwan#&*0630";
+    private static final String MM_KEY = "mm#&*0630";
 
     public static String generateToken(String content){
         return MD5.digest2HEX(MM_KEY + Base64.encodeBase64String(content.getBytes()) + System.currentTimeMillis() + RandomUtils.nextInt(999999999), true);
