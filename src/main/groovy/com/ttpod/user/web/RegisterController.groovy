@@ -1,5 +1,6 @@
 package com.ttpod.user.web
 
+import com.mongodb.BasicDBObject
 import com.ttpod.rest.anno.Rest
 import com.ttpod.user.common.util.AuthCode
 import com.ttpod.user.model.Code
@@ -59,12 +60,12 @@ class RegisterController extends BaseController {
             return [code: Code.手机号码已存在]
         }
 
-        String token = buildUser(mobile, pwd)
-        if (StringUtils.isBlank(token)) {
+        def user = buildUser(mobile, pwd) as BasicDBObject
+        if (user == null) {
             return [code: Code.ERROR]
         }
 
-        [code: Code.OK, data: [token: token]]
+        [code: Code.OK, data: [token: user['token']]]
     }
 
     /**
@@ -72,25 +73,25 @@ class RegisterController extends BaseController {
      * @param req
      * @return
      */
-//    def robot(HttpServletRequest req) {
-//        if (isTest) {
-//            def username = req['username']
-//            def pwd = req['pwd']
-//            if (StringUtils.isBlank(username) || StringUtils.isBlank(pwd)) {
-//                return [code: Code.参数无效]
-//            }
-//            //用户名是否已经存在
-//            if (userNameExist(username)) {
-//                return [code: Code.用户名已存在, error: '用户名已存在']
-//            }
-//            String token = buildUser(username, pwd)
-//            if (StringUtils.isBlank(token)){
-//                return [code: Code.ERROR]
-//            }
-//
-//            [code: Code.OK, data: [access_token: token, _id: user[_id]]]
-//        }
-//    }
+    def robot(HttpServletRequest req) {
+        if (isTest) {
+            def username = req['username']
+            def pwd = req['pwd']
+            if (StringUtils.isBlank(username) || StringUtils.isBlank(pwd)) {
+                return [code: Code.参数无效]
+            }
+            //用户名是否已经存在
+            if (userNameExist(username)) {
+                return [code: Code.用户名已存在, error: '用户名已存在']
+            }
+            def user = buildUser(username, pwd) as BasicDBObject
+            if (user == null){
+                return [code: Code.ERROR]
+            }
+
+            [code: Code.OK, data: [access_token: user['token'], _id: user['_id']]]
+        }
+    }
 
     /**
      * 创建用户
@@ -98,16 +99,16 @@ class RegisterController extends BaseController {
      * @param pwd
      * @return
      */
-    private String buildUser(String username, String pwd) {
+    private BasicDBObject buildUser(String username, String pwd) {
         def now = new Date().getTime()
         def userId = userKGS.nextId()
         def token = generateToken(pwd + userId) as String
         def password = MD5.digest2HEX(pwd + userId)
         def pic = User.DEFAULT_PIC
-        def info = $$('_id': userId, 'nickname': buildDefaultNickName(),
+        def user = $$('_id': userId, 'nickname': buildDefaultNickName(),
                 'mobile': username, 'pwd': password, 'regTime': now, 'token': token, 'via': 'mobile', 'pic': pic, 'username': username)
-        if (!users().insert(info).getN()) {
-            return token
+        if (!users().insert(user).getN()) {
+            return user
         }
 
         return null

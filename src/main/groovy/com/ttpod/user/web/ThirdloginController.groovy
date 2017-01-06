@@ -49,7 +49,7 @@ class ThirdloginController extends BaseController {
     // ios qq app key
     private final static String IOS_QQ_APP_KEY = 'LwxSkWtjBUtxXeqW'
 
-    private final static Map<String, String> QQ_APP_ID_KEYS = ["1105926156": ANDROID_QQ_APP_KEY, "1105926090": IOS_QQ_APP_KEY]
+    private final static Map QQ_APP_ID_KEYS = ["${ANDROID_QQ_APP_ID}": ANDROID_QQ_APP_KEY, "${IOS_QQ_APP_ID}": IOS_QQ_APP_KEY]
 
     private final static String TOKEN_FIELD = '{access_token}'
 
@@ -66,7 +66,7 @@ class ThirdloginController extends BaseController {
         if (StringUtils.isBlank(appId)) {
             return Web.missParam()
         }
-        def key = QQ_APP_ID_KEYS[appId]
+        String key = QQ_APP_ID_KEYS[appId]
         return qq_login(req, response, appId, key)
     }
 
