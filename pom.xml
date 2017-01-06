@@ -89,7 +89,7 @@
             <properties>
                 <redis.host>127.0.0.1</redis.host>
                 <redis.port>6379</redis.port>
-                <mongo.uri>192.168.31.249:10000</mongo.uri>
+                <mongo.uri>192.168.31.236:10000</mongo.uri>
                 <buss.thread.minSize>40</buss.thread.minSize>
                 <buss.thread.maxSize>50</buss.thread.maxSize>
                 <pic.folder>/empty/upload/</pic.folder>
@@ -99,7 +99,7 @@
                 <aspectj-scope>provided</aspectj-scope>
 
                 <pic.domain>http://test.img.sumeme.com/</pic.domain>
-                <api.domain>http://test.user.memeyule.com/</api.domain>
+                <api.domain>http://test-aiuser.memeyule.com/</api.domain>
                 <site.domain>http://www.2339.com/</site.domain>
             </properties>
         </profile>
