@@ -11,6 +11,7 @@ import com.ttpod.user.web.api.Web
 import org.apache.commons.lang.StringUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.web.bind.ServletRequestUtils
 
 import javax.annotation.Resource
 import javax.servlet.http.HttpServletRequest
@@ -37,19 +38,14 @@ class ThirdloginController extends BaseController {
     private static final String WEIXIN_H5_APP_ID = Web.isTest ? "wx27a01ce6c6c3e0e8" : "wx50485b4158037776"
     private static final String WEIXIN_H5_APP_SECRET = Web.isTest ? "6d8d88703396a68d6dff50caef7c0491" : "1c8909b64f7b3eb939da2b4e90dae4e3"
 
-    // android qq id
-    private final static String ANDROID_QQ_APP_ID = '1105926156'
+    // qq app id
+    private final static String QQ_APP_ID = '1105926156'
 
-    // ios qq app key
-    private final static String ANDROID_QQ_APP_KEY = 'khBpyrB0IGkgGPE3'
+    // qq app key
+    private final static String QQ_APP_KEY = 'khBpyrB0IGkgGPE3'
 
-    // ios qq id
-    private final static String IOS_QQ_APP_ID = '1105926090'
 
-    // ios qq app key
-    private final static String IOS_QQ_APP_KEY = 'LwxSkWtjBUtxXeqW'
-
-    private final static Map QQ_APP_ID_KEYS = ["${ANDROID_QQ_APP_ID}": ANDROID_QQ_APP_KEY, "${IOS_QQ_APP_ID}": IOS_QQ_APP_KEY]
+    private final static Map QQ_APP_ID_KEYS = ["${QQ_APP_ID}": QQ_APP_KEY]
 
     private final static String TOKEN_FIELD = '{access_token}'
 
@@ -62,10 +58,7 @@ class ThirdloginController extends BaseController {
      * @param req
      */
     def qq(HttpServletRequest req, HttpServletResponse response) {
-        String appId = req['app_id']
-        if (StringUtils.isBlank(appId)) {
-            return Web.missParam()
-        }
+        String appId = ServletRequestUtils.getStringParameter(req, "app_id", QQ_APP_ID)
         String key = QQ_APP_ID_KEYS[appId]
         return qq_login(req, response, appId, key)
     }

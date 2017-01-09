@@ -206,8 +206,8 @@ class AuthCodeController extends BaseController {
         //发送手机验证码
         content = content.replace("{code}", code)
         try {
-            String[] sendMobile = {mobile}
-            String retCode= china ? HttpSender.batchSend(sendMobile, content) : HttpSender.batchSendInter(mobile, content);
+            String[] sendMobile = [mobile]
+            String retCode= HttpSender.batchSend(sendMobile, content)
             String ip = Web.getClientId(req)
             logger.info("[ip: {}, send sms mobile: {}, retCode:{}]", ip, mobile, retCode)
             if(retCode.equals("0")){
