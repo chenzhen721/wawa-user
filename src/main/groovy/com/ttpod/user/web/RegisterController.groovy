@@ -84,7 +84,7 @@ class RegisterController extends BaseController {
             if (userNameExist(username)) {
                 return [code: Code.用户名已存在, error: '用户名已存在']
             }
-            def user = buildUser(username, pwd) as BasicDBObject
+            BasicDBObject user = buildUser(username, pwd)
             if (user == null){
                 return [code: Code.ERROR]
             }
