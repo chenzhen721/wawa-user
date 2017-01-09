@@ -15,6 +15,7 @@ import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.routing.HttpRoute;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DecompressingHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
@@ -35,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+@CompileStatic
 public abstract class HttpClientUtils {
 
     static final Logger log = LoggerFactory.getLogger(HttpClientUtils.class);
@@ -43,7 +45,7 @@ public abstract class HttpClientUtils {
 
     public static final Charset GB18030 =  Charset.forName("GB18030");
 
-    static final int  TIME_OUT  = Integer.getInteger("http.timeout", 3000);
+    static final int  TIME_OUT  = Integer.getInteger("http.timeout", 5000);
 
     static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.4 (KHTML, like Gecko) Safari/537.4";
 
@@ -110,24 +112,24 @@ public abstract class HttpClientUtils {
 
 
     public static String post(String url,Map<String,String> params,Map<String,String> headers) throws IOException{
-        return post(url, params, headers, null);
-    }
-
-    public static String post(String url,Map<String,String> params,Map<String,String> headers ,Charset forceCharset) throws IOException{
         HttpPost post = new HttpPost(url);
         if(params !=null &&  ! params.isEmpty()){
             List<NameValuePair> ps = new ArrayList<NameValuePair>(params.size());
             for (Map.Entry<String,String> kv : params.entrySet()){
                 ps.add(new BasicNameValuePair(kv.getKey(), kv.getValue()));
             }
-            if(forceCharset != null){
-                post.setEntity(new UrlEncodedFormEntity(ps, forceCharset.name()));
-            }else{
-                post.setEntity(new UrlEncodedFormEntity(ps));
-            }
-
+            post.setEntity(new UrlEncodedFormEntity(ps, UTF8.name()));
         }
-        return execute(post,headers, forceCharset);
+        return execute(post,headers,null);
+    }
+
+    public static String postJson(String url, String body) throws IOException{
+        HttpPost post = new HttpPost(url);
+        post.setEntity(new StringEntity(body, UTF8.name()));
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        return execute(post, headers, null);
     }
 
 
@@ -161,7 +163,7 @@ public abstract class HttpClientUtils {
             // CLOST_WAIT 僵死连接数 （占用一个路由的连接）
             //EntityUtils.consumeQuietly(entity);
             // 被动关闭连接 (目标服务器发生异常主动关闭了链接) 之后自己并没有释放连接，那就会造成CLOSE_WAIT的状态
-            log.info(handler.getName() + "  {},cost {} ms",request.getURI().getHost()+request.getURI().getPath(),System.currentTimeMillis() - begin);
+            log.info(handler.getName() + "  {},cost {} ms",request.getURI(),System.currentTimeMillis() - begin);
         }
     }
 

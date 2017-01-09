@@ -1,82 +1,65 @@
 package com.bcloud.msg;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.ttpod.rest.common.util.http.HttpClientUtil4_3;
 import com.ttpod.user.common.util.HttpClientUtils;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.net.URLEncoder;
 
 /**
  * 创蓝发送验证码接口
  */
-public class HttpSender{
+public class HttpSender {
 
-    static Logger logger = LoggerFactory.getLogger(HttpSender.class);
-    private static final String account = "VIP-meme21";
-    private static final String pswd = "Txb123456";
-    private static final String api_url = "http://222.73.117.156/msg/HttpBatchSendSM"+"?account="+account+"&pswd="+pswd;
+    private static final String ACCOUNT = "N1208146";
 
-    /**
-     * 国际短信接口
-     */
-    private static final String inter_account = "I9154031";
-    private static final String inter_pswd = "Psbea402";
-    private static final String inter_api_url = "http://222.73.117.140:8044/mt?dc=15&rf=1&tf=3"+"&un="+inter_account+"&pw="+inter_pswd;
-    /**
-     *
-     * @param mobile
-     *            手机号码，多个号码使用","分割
-     * @param msg
-     *            短信内容
-     * @param needstatus
-     *            是否需要状态报告，需要true，不需要false
-     * @return 返回值定义参见HTTP协议文档
-     * @throws Exception
-     */
-    public static String batchSend(String mobile, String msg, boolean needstatus, String extno) throws Exception{
-        String resp = "";
-        try{
-            resp = HttpClientUtil4_3.get(api_url+"&mobile="+mobile+"&needstatus="+needstatus+"&msg="+msg, null, HttpClientUtil4_3.UTF8);
-            System.out.println("resp : "+resp);
-            if(StringUtils.isNotEmpty(resp)){
-                String[] resps = StringUtils.split(resp, ",");
-                if(resps[1].startsWith("0")){
-                    return "0";
-                }
+    private static final String PSWD = "Ps86329b";
 
-            }
-        }catch (Exception e){
-            throw  e;
-        }
-        return resp;
-    }
+    private static final String API_URL = "http://222.73.117.169/msg/HttpBatchSendSM" + "?account=" + ACCOUNT + "&pswd=" + PSWD;
+
+    private static final String MSG_SIGN = "【爱玩直播】";
+
+    // needstatus 是否需要短信状态报告
+    private static final boolean NEED_STATUS = false;
+
+    // 短信发送成功状态
+    private static final String SUCCESS_STATUS = "0";
+
+    // 短信发送失败状态
+    private static final String FAILURE_STATUS = "1";
 
     /**
-     * 国际验证码
-     * @param mobile
+     * @param mobileArr
      * @param msg
      * @return
      * @throws Exception
      */
-    public static String batchSendInter(String mobile, String msg) throws Exception{
-        String resp = "";
-        try{
-            resp = HttpClientUtil4_3.get(inter_api_url+"&da="+mobile+"&sm="+msg, null, HttpClientUtil4_3.UTF8);
-            System.out.println("resp : "+resp);
-            if(StringUtils.contains(resp, "id=")){
-                return "0";
-            }
-        }catch (Exception e){
-            throw  e;
+    public static String batchSend(String[] mobileArr, String msg) throws Exception {
+        String mobile = "";
+        for (String tmp : mobileArr) {
+            mobile += tmp + ",";
         }
-        return resp;
+
+        if (StringUtils.isNotBlank(mobile)) {
+            msg = MSG_SIGN + msg;
+            String encode = URLEncoder.encode(msg, "UTF-8");
+            String url = API_URL + "&mobile=" + mobile + "&needstatus=" + NEED_STATUS + "&msg=" + encode;
+            String resp = HttpClientUtils.get(url, null, HttpClientUtils.UTF8);
+            if (StringUtils.isNotBlank(resp)) {
+                String[] resps = StringUtils.split(resp, ",");
+                String status = resps[1];
+                if (status.startsWith(SUCCESS_STATUS)) {
+                    return SUCCESS_STATUS;
+                }
+            }
+        }
+        return FAILURE_STATUS;
     }
 
-    public static void main (String[] args)throws Exception{
-        //HttpSender.batchSend("15021031149", "【么么直播】正在进行手机验证操作，验证码：123456。请勿将验证码泄露给他人。", Boolean.TRUE, null);
-        System.out.println(HttpSender.batchSendInter("11231031149", "国际-【么么直播】正在进行手机验证操作，验证码：123456。请勿将验证码泄露给他人。"));
+
+    public static void main(String[] args) throws Exception {
+        String[] mobile = {"15618040084"};
+//        String msg = "主人,您有一个新的订单.NICK_NAME要您在CALL_TIME叫醒ta.打开甜心叫醒查看详情-甜心叫醒";
+        String msg = "【甜心叫早】主人,您有一个新的订单.有理想的人妖要您在2016-12-09 05:35:00叫醒ta.打开甜心叫醒查看详情";
+        System.out.println(batchSend(mobile, msg));
     }
 }
