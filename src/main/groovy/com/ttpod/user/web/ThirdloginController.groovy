@@ -39,10 +39,10 @@ class ThirdloginController extends BaseController {
     private static final String WEIXIN_H5_APP_SECRET = Web.isTest ? "6d8d88703396a68d6dff50caef7c0491" : "1c8909b64f7b3eb939da2b4e90dae4e3"
 
     // qq app id
-    private final static String QQ_APP_ID = '1105926156'
+    private final static String QQ_APP_ID = '1105930052'
 
     // qq app key
-    private final static String QQ_APP_KEY = 'khBpyrB0IGkgGPE3'
+    private final static String QQ_APP_KEY = 'zMQ7IUsD6lBCUYS8'
 
     private final static Map<GString,String> QQ_APP_ID_KEYS = ["${QQ_APP_ID}": QQ_APP_KEY]
 
