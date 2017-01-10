@@ -57,7 +57,7 @@
         <redis.pool.testOnBorrow>true</redis.pool.testOnBorrow>
         <redis.pool.testOnReturn>true</redis.pool.testOnReturn>
         <aspectj-scope>compile</aspectj-scope>
-        <mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>
+        <!--<mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>-->
     </properties>
 
     <profiles>
