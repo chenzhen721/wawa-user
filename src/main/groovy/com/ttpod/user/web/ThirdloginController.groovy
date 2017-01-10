@@ -102,7 +102,7 @@ class ThirdloginController extends BaseController {
         //是否首次登录
         Boolean first_login = Boolean.FALSE
 
-        if (StringUtils.isEmpty(access_token)) {
+        if (StringUtils.isBlank(access_token)) {
             def redirect_uri = URLEncoder.encode(SHOW_URL, "utf-8")
             //通过code 获取用户token
             def token_url = "${QQ_URL}token?grant_type=authorization_code&client_id=${app_id}&redirect_uri=${redirect_uri}&client_secret=${app_key}&code=${code}"
@@ -111,10 +111,9 @@ class ThirdloginController extends BaseController {
             Map<String, String> respMap = HttpClientUtil.queryString2Map(resp)
             logger.debug("qq login token_url respMap: {}", respMap)
             access_token = respMap['access_token']
-        }
-
-        if (StringUtils.isBlank(access_token)) {
-            return [code: Code.ERROR]
+            if (StringUtils.isBlank(access_token)) {
+                return [code: Code.ERROR]
+            }
         }
 
         // 使用Access Token来获取用户的OpenID "https://graph.qq.com/oauth2.0/me?access_token="
