@@ -89,7 +89,6 @@
             <properties>
                 <redis.host>192.168.31.236</redis.host>
                 <redis.port>6379</redis.port>
-                <mongo.uri>192.168.31:231:10000</mongo.uri>
                 <buss.thread.minSize>40</buss.thread.minSize>
                 <buss.thread.maxSize>50</buss.thread.maxSize>
                 <pic.folder>/empty/upload/</pic.folder>
