@@ -21,7 +21,7 @@
         <maven-compiler-plugin-version>3.1</maven-compiler-plugin-version>
 
         <targetJdk>1.7</targetJdk>
-        <groovy-all-compiler-version>2.3.11</groovy-all-compiler-version>
+        <groovy-all-compiler-version>2.3.10</groovy-all-compiler-version>
         <groovy-scope>provided</groovy-scope>
         <spring-version>3.2.3.RELEASE</spring-version>
         <aspectj-version>1.7.2</aspectj-version>
