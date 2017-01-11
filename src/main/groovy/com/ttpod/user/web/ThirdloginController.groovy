@@ -39,13 +39,12 @@ class ThirdloginController extends BaseController {
     private static final String WEIXIN_H5_APP_SECRET = Web.isTest ? "6d8d88703396a68d6dff50caef7c0491" : "1c8909b64f7b3eb939da2b4e90dae4e3"
 
     // qq app id
-    private final static String QQ_APP_ID = '1105926156'
+    private final static String QQ_APP_ID = '1105930052'
 
     // qq app key
-    private final static String QQ_APP_KEY = 'khBpyrB0IGkgGPE3'
+    private final static String QQ_APP_KEY = 'zMQ7IUsD6lBCUYS8'
 
-
-    private final static Map QQ_APP_ID_KEYS = ["${QQ_APP_ID}": QQ_APP_KEY]
+    private final static Map<GString,String> QQ_APP_ID_KEYS = ["${QQ_APP_ID}": QQ_APP_KEY]
 
     private final static String TOKEN_FIELD = '{access_token}'
 
@@ -59,7 +58,7 @@ class ThirdloginController extends BaseController {
      */
     def qq(HttpServletRequest req, HttpServletResponse response) {
         String appId = ServletRequestUtils.getStringParameter(req, "app_id", QQ_APP_ID)
-        String key = QQ_APP_ID_KEYS[appId]
+        String key = QQ_APP_ID_KEYS["${appId}"]
         return qq_login(req, response, appId, key)
     }
 
@@ -103,7 +102,7 @@ class ThirdloginController extends BaseController {
         //是否首次登录
         Boolean first_login = Boolean.FALSE
 
-        if (StringUtils.isEmpty(access_token)) {
+        if (StringUtils.isBlank(access_token)) {
             def redirect_uri = URLEncoder.encode(SHOW_URL, "utf-8")
             //通过code 获取用户token
             def token_url = "${QQ_URL}token?grant_type=authorization_code&client_id=${app_id}&redirect_uri=${redirect_uri}&client_secret=${app_key}&code=${code}"
@@ -112,10 +111,9 @@ class ThirdloginController extends BaseController {
             Map<String, String> respMap = HttpClientUtil.queryString2Map(resp)
             logger.debug("qq login token_url respMap: {}", respMap)
             access_token = respMap['access_token']
-        }
-
-        if (StringUtils.isBlank(access_token)) {
-            return [code: Code.ERROR]
+            if (StringUtils.isBlank(access_token)) {
+                return [code: Code.ERROR]
+            }
         }
 
         // 使用Access Token来获取用户的OpenID "https://graph.qq.com/oauth2.0/me?access_token="
