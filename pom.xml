@@ -16,18 +16,15 @@
     <properties>
         <contextPath/>
 
-        <targetJdk>1.7</targetJdk>
-
         <maven-source-plugin-version>2.2.1</maven-source-plugin-version>
         <maven-jar-plugin-version>2.4</maven-jar-plugin-version>
         <maven-compiler-plugin-version>3.1</maven-compiler-plugin-version>
 
+        <targetJdk>1.7</targetJdk>
         <groovy-all-compiler-version>2.4.6</groovy-all-compiler-version>
         <groovy-scope>provided</groovy-scope>
-
         <spring-version>3.2.3.RELEASE</spring-version>
         <aspectj-version>1.7.2</aspectj-version>
-
         <httpclient-version>4.2.3</httpclient-version>
         <slf4j.version>1.7.5</slf4j.version>
         <javassist.version>3.21.0-GA</javassist.version>
@@ -38,9 +35,9 @@
         <log.web.level>DEBUG</log.web.level>
         <pic.domain>http://img.sumeme.com/</pic.domain>
         <api.domain>http://user.memeyule.com/</api.domain>
-        <site.domain>http://www.2339.com/</site.domain>
-        <mongo.uri>192.168.31.246:27017</mongo.uri>
+        <site.domain>http://www.aiwanzhibo.com/</site.domain>
         <pic.folder>c:/upload/</pic.folder>
+
         <buss.thread.minSize>300</buss.thread.minSize>
         <buss.thread.maxSize>400</buss.thread.maxSize>
         <redis.host>192.168.1.100</redis.host>
@@ -61,7 +58,7 @@
             <properties>
                 <redis.port>6379</redis.port>
                 <redis.host>192.168.31.246</redis.host>
-                <mongo.uri>${redis.host}:27017</mongo.uri>
+                <mongo.uri>192.168.31.246:27017</mongo.uri>
                 <api.domain>http://user.memeyule.com/</api.domain>
             </properties>
 
