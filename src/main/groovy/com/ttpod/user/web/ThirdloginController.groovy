@@ -123,15 +123,16 @@ class ThirdloginController extends BaseController {
         logger.debug("qq login openidResp: {}", openidResp)
         Map<String, Object> openidMaps = JSONUtil.jsonToMap(StringUtils.substringBetween(openidResp, "(", ")"))
         def openId = openidMaps['openid'] as String
-        def unionid = openidMaps['unionid'] as String
-        logger.debug("qq login openid: {},unionid is {}", openId, unionid)
+//        def unionid = openidMaps['unionid'] as String
+//        logger.debug("qq login openid: {}", openId)
 
-        if (StringUtils.isBlank(openId) || StringUtils.isBlank(unionid)) {
+        if (StringUtils.isBlank(openId)) {
             return [code: Code.ERROR]
         }
 
         //获取用户信息
-        def user = users().findOne($$('qq_unionid': unionid), USER_FIELD)
+//        def user = users().findOne($$('qq_unionid': unionid), USER_FIELD)
+        def user = users().findOne($$('qq_openid': openId), USER_FIELD)
 
         //首次登录同步用户信息https://graph.qq.com/user/get_user_info?
         if (user == null) {
@@ -146,7 +147,7 @@ class ThirdloginController extends BaseController {
             }
             Map userInfos = new HashMap();
             userInfos.put("qq_openid", openId)
-            userInfos.put("qq_unionid", unionid)
+//            userInfos.put("qq_unionid", unionid)
             userInfos.put("qq_access_token", access_token)
             userInfos.put("pic", userInfoMaps['figureurl_qq_2'])
             userInfos.put("nickname", userInfoMaps['nickname'])
@@ -158,11 +159,12 @@ class ThirdloginController extends BaseController {
         }
 
         //PC端转跳
-        if (StringUtils.isNotBlank(back_url)) {
-            back_url = getRedirectByBackUrl(back_url, user['token'] as String)
-            response.sendRedirect(back_url)
-            return
-        }
+//        if (StringUtils.isNotBlank(back_url)) {
+//            back_url = getRedirectByBackUrl(back_url, user['token'] as String)
+//            response.sendRedirect(back_url)
+//            return
+//        }
+        logger.debug('user is {},first_login is {}',user,first_login)
         return [code: Code.OK, data: [token: user['token'], first_login: first_login]]
     }
 
