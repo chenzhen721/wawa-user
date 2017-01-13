@@ -44,7 +44,8 @@ class ThirdloginController extends BaseController {
     // qq app key
     private final static String QQ_APP_KEY = 'tDBHaAJu4jOYDPFX'
 
-    private final static Map<String,String> QQ_APP_ID_KEYS = ['1105930052' : QQ_APP_KEY]
+    // qq id和key
+    private final static Map<String,String> QQ_APP_ID_KEYS = ['1105945342': 'tDBHaAJu4jOYDPFX']
 
     private final static String TOKEN_FIELD = '{access_token}'
 
@@ -58,7 +59,7 @@ class ThirdloginController extends BaseController {
      */
     def qq(HttpServletRequest req, HttpServletResponse response) {
         String appId = ServletRequestUtils.getStringParameter(req, "app_id", QQ_APP_ID)
-        String key = QQ_APP_ID_KEYS.get("${appId}")
+        String key = QQ_APP_ID_KEYS[appId]
         return qq_login(req, response, appId, key)
     }
 
