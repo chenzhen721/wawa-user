@@ -58,7 +58,7 @@ class ThirdloginController extends BaseController {
      */
     def qq(HttpServletRequest req, HttpServletResponse response) {
         String appId = ServletRequestUtils.getStringParameter(req, "app_id", QQ_APP_ID)
-        String key = QQ_APP_ID_KEYS["${appId}"]
+        String key = QQ_APP_ID_KEYS.get("${appId}")
         return qq_login(req, response, appId, key)
     }
 
