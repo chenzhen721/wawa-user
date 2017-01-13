@@ -89,7 +89,7 @@
                 <aspectj-scope>provided</aspectj-scope>
                 <pic.domain>http://test.img.sumeme.com/</pic.domain>
                 <api.domain>http://test-aiuser.memeyule.com/</api.domain>
-                <site.domain>http://www.2339.com/</site.domain>
+                <site.domain>http://www.aiwanzhibo.com/</site.domain>
                 <!-- replset-->
                 <mongo.uri>192.168.31.231:10000,192.168.31.236:10000,192.168.31.231:10001</mongo.uri>
                 <mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write>
