@@ -100,6 +100,7 @@ class AuthCodeController extends BaseController {
     private static final String INTER_SMS_SEND_CONTENT_EXCHANGE="国际-正在进行兑换柠檬操作，验证码：{code}。请勿将验证码泄露给他人。"
 
     def send_mobile(HttpServletRequest req) {
+        logger.debug('Received send_mobile params is {}',req.getParameterMap())
         def mobile = req['mobile']
         Integer type = ServletRequestUtils.getIntParameter(req, "type", SmsCode.注册.ordinal())
         Boolean china = ServletRequestUtils.getBooleanParameter(req, "china", Boolean.TRUE)

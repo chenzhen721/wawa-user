@@ -61,7 +61,7 @@ public class HttpSender {
     public static void main(String[] args) throws Exception {
         String[] mobile = {"15618040084"};
 //        String msg = "主人,您有一个新的订单.NICK_NAME要您在CALL_TIME叫醒ta.打开甜心叫醒查看详情-甜心叫醒";
-        String msg = "【甜心叫早】主人,您有一个新的订单.有理想的人妖要您在2016-12-09 05:35:00叫醒ta.打开甜心叫醒查看详情";
+        String msg = "主人,您有一个新的订单.有理想的人妖要您在2016-12-09 05:35:00叫醒ta.打开甜心叫醒查看详情";
         System.out.println(batchSend(mobile, msg));
     }
 }
