@@ -1,8 +1,6 @@
 package com.bcloud.msg;
 
-import com.ttpod.rest.common.util.http.HttpClientUtil;
 import com.ttpod.rest.common.util.http.HttpClientUtil4_3;
-import com.ttpod.user.common.util.HttpClientUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.net.URLEncoder;
@@ -45,7 +43,7 @@ public class HttpSender {
             msg = MSG_SIGN + msg;
             String encode = URLEncoder.encode(msg, "UTF-8");
             String url = API_URL + "&mobile=" + mobile + "&needstatus=" + NEED_STATUS + "&msg=" + encode;
-            String resp = HttpClientUtils.get(url, null, HttpClientUtils.UTF8);
+            String resp = HttpClientUtil4_3.get(url, null, HttpClientUtil4_3.UTF8);
             if (StringUtils.isNotBlank(resp)) {
                 String[] resps = StringUtils.split(resp, ",");
                 String status = resps[1];

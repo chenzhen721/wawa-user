@@ -2,34 +2,22 @@ package com.ttpod.user.web
 
 import com.Geetest.util.GeetestUtils
 import com.bcloud.msg.HttpSender
-import com.ttpod.rest.AppProperties
 import com.ttpod.rest.anno.Rest
-import com.ttpod.rest.common.doc.ParamKey
-import com.ttpod.rest.common.util.JSONUtil
-import com.ttpod.rest.common.util.http.HttpClientUtil4_3
 import com.ttpod.user.common.util.AuthCode
 import com.ttpod.user.common.util.KeyUtils
-import com.ttpod.user.common.util.TenpayHttpClient
-import com.ttpod.user.common.util.XMLUtil
 import com.ttpod.user.model.Code
 import com.ttpod.user.model.SmsCode
-import com.ttpod.user.web.BaseController
 import com.ttpod.user.web.api.Web
-import groovy.xml.XmlUtil
-import org.apache.commons.codec.Encoder
+import org.apache.commons.lang.StringUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.apache.commons.lang.StringUtils
 import org.springframework.web.bind.ServletRequestUtils
 
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import java.nio.charset.Charset
-import java.rmi.RemoteException
-import java.security.Key
 import java.util.concurrent.TimeUnit
-import static com.ttpod.rest.common.util.WebUtils.*
-import static com.ttpod.rest.common.doc.MongoKey.*;
+
+import static com.ttpod.rest.common.util.WebUtils.$$;
 
 /**
  * @author: jiao.li@ttpod.com
