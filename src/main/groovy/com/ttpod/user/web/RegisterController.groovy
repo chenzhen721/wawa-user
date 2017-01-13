@@ -65,6 +65,7 @@ class RegisterController extends BaseController {
             return [code: Code.ERROR]
         }
 
+        logger.debug('user is {}',user)
         [code: Code.OK, data: [token: user['token']]]
     }
 
