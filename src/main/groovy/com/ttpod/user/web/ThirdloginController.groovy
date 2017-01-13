@@ -118,7 +118,7 @@ class ThirdloginController extends BaseController {
         }
 
         // 使用Access Token来获取用户的OpenID "https://graph.qq.com/oauth2.0/me?access_token="
-        def openid_url = "${QQ_URL}me?access_token=${access_token}&unionid=1"
+        def openid_url = "${QQ_URL}me?access_token=${access_token}"
         String openidResp = HttpClientUtil4_3.get(openid_url, null, HttpClientUtil4_3.UTF8)
         logger.debug("qq login openidResp: {}", openidResp)
         Map<String, Object> openidMaps = JSONUtil.jsonToMap(StringUtils.substringBetween(openidResp, "(", ")"))
