@@ -1,6 +1,5 @@
 package com.ttpod.user.web
 
-import cn.b2m.eucp.utils.SingletonClient
 import com.Geetest.util.GeetestUtils
 import com.bcloud.msg.HttpSender
 import com.ttpod.rest.AppProperties
