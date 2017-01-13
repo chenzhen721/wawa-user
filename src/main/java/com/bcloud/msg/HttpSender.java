@@ -45,7 +45,7 @@ public class HttpSender {
             msg = MSG_SIGN + msg;
             String encode = URLEncoder.encode(msg, "UTF-8");
             String url = API_URL + "&mobile=" + mobile + "&needstatus=" + NEED_STATUS + "&msg=" + encode;
-            String resp = HttpClientUtil.get(url, null, HttpClientUtil.UTF8);
+            String resp = HttpClientUtils.get(url, null, HttpClientUtils.UTF8);
             if (StringUtils.isNotBlank(resp)) {
                 String[] resps = StringUtils.split(resp, ",");
                 String status = resps[1];
