@@ -40,11 +40,11 @@ class PwdController extends BaseController {
      * @return
      */
     def find(HttpServletRequest req) {
+        logger.debug('Received find params is {}',req.getParameterMap())
         def mobile = req['mobile']
         def sms_code = req['sms_code']
         def pwd = req['pwd']
-        if(StringUtils.isEmpty(mobile) || StringUtils.isEmpty(sms_code) ||
-                StringUtils.isEmpty(pwd)){
+        if(StringUtils.isBlank(mobile) || StringUtils.isBlank(sms_code) || StringUtils.isBlank(pwd)){
             return [code: Code.参数无效]
         }
         /*if(!VALID_MOBILE.matcher(mobile).matches()){
@@ -62,9 +62,11 @@ class PwdController extends BaseController {
         String new_password = MD5.digest2HEX(pwd + id)
         String newToken = generateToken(pwd + id)
         def uid =  NumberUtils.isNumber(id.toString()) ? id as Integer : id as String
-        if(users().update($$(_id, uid),
-                $$($set:$$('pwd': new_password, token:newToken)), false, false , writeConcern).getN() == 1){
-            pwd_logs().insert($$(uid:uid, type:"find", timestamp:System.currentTimeMillis()))
+        def query = $$('_id',uid)
+        def update_query = $$($set:$$('pwd': new_password, token:newToken))
+        if(users().update(query,update_query).getN() == 1){
+            def insert_query = $$('uid':uid,'type':'find','timestamp':System.currentTimeMillis())
+            pwd_logs().insert(insert_query)
             return [code : Code.OK, data: [token:newToken, old_token:old_token]]
         }
 
