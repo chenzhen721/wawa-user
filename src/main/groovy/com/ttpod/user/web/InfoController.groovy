@@ -1,27 +1,22 @@
 package com.ttpod.user.web
 
-import com.mongodb.BasicDBObject
 import com.mongodb.DBObject
-import com.ttpod.rest.AppProperties
 import com.ttpod.rest.anno.Rest
-import com.ttpod.user.common.util.AuthCode
-import com.ttpod.user.common.util.KeyUtils
 import com.ttpod.user.model.Code
 import com.ttpod.user.model.SmsCode
-import com.ttpod.user.web.BaseController
 import com.ttpod.user.web.api.Web
+import org.apache.commons.lang.StringUtils
 import org.apache.commons.lang.math.NumberUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.apache.commons.lang.StringUtils
 import org.springframework.web.bind.ServletRequestUtils
 
 import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
-import java.util.concurrent.TimeUnit
+
+import static com.ttpod.rest.common.doc.MongoKey.$set
+import static com.ttpod.rest.common.doc.MongoKey._id
 import static com.ttpod.rest.common.util.MsgDigestUtil.MD5
-import static com.ttpod.rest.common.util.WebUtils.*
-import static com.ttpod.rest.common.doc.MongoKey.*;
+import static com.ttpod.rest.common.util.WebUtils.$$;
 /**
  * @author: jiao.li@ttpod.com
  * Date: 14-6-16 下午1:39
@@ -67,22 +62,24 @@ class InfoController extends BaseController {
         def mobile = req['mobile']
         def sms_code = req['sms_code']
         def pwd = req['pwd']
+        def type = req['type']
 
-        if(StringUtils.isEmpty(mobile) || StringUtils.isEmpty(sms_code) ||
-                StringUtils.isEmpty(token)){
+        if(StringUtils.isBlank(mobile) || StringUtils.isBlank(sms_code) || StringUtils.isBlank(token) || StringUtils.isBlank(type)){
             return [code: Code.参数无效]
         }
-        /*if(!VALID_MOBILE.matcher(mobile).matches()){
-            return [code: Code.手机号格式错误]
-        }*/
-        if(Web.smsCodeVeri(SmsCode.注册, req)){
+
+        if(Integer.valueOf(type) != SmsCode.绑定手机号.ordinal()){
+            return [code: Code.参数无效]
+        }
+
+        if(Web.smsCodeVeri(SmsCode.绑定手机号, req)){
             return [code : Code.短信验证码无效]
         }
         if(users().count($$(mobile: mobile)) > 0){
             return [code : Code.手机号码已存在]
         }
         def userId = null
-        if(StringUtils.isNotEmpty(id)){
+        if(StringUtils.isNotBlank(id)){
             userId =  NumberUtils.isNumber(id.toString()) ? id as Integer : id as String
         }
 
