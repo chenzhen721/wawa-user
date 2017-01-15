@@ -5,5 +5,5 @@ package com.ttpod.user.model;
  * date: 14-2-22 下午2:39
  */
 public enum SmsCode {
-    UnKnown,注册,找回密码,兑换柠檬;
+    UnKnown,注册,找回密码,兑换柠檬,绑定手机号;
 }

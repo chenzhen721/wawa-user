@@ -82,31 +82,31 @@ class AuthCodeController extends BaseController {
     private static final String SMS_SEND_CONTENT="正在进行手机验证操作，验证码：{code}。请勿将验证码泄露给他人。"
     private static final String SMS_SEND_CONTENT_FIND="正在进行找回密码操作，验证码：{code}。请勿将验证码泄露给他人。"
     private static final String SMS_SEND_CONTENT_EXCHANGE="正在进行兑换柠檬操作，验证码：{code}。请勿将验证码泄露给他人。"
+    private static final String SMS_SEND_CONTENT_BIND_MOBILE="正在绑定手机号，验证码：{code}。请勿将验证码泄露给他人。"
 
-    private static final String INTER_SMS_SEND_CONTENT="国际-正在进行手机验证操作，验证码：{code}。请勿将验证码泄露给他人。"
-    private static final String INTER_SMS_SEND_CONTENT_FIND="国际-正在进行找回密码操作，验证码：{code}。请勿将验证码泄露给他人。"
-    private static final String INTER_SMS_SEND_CONTENT_EXCHANGE="国际-正在进行兑换柠檬操作，验证码：{code}。请勿将验证码泄露给他人。"
 
     def send_mobile(HttpServletRequest req) {
         logger.debug('Received send_mobile params is {}',req.getParameterMap())
         def mobile = req['mobile']
         Integer type = ServletRequestUtils.getIntParameter(req, "type", SmsCode.注册.ordinal())
-        Boolean china = ServletRequestUtils.getBooleanParameter(req, "china", Boolean.TRUE)
         if(StringUtils.isEmpty(mobile)){
             [code : Code.参数无效]
         }
-        //国内手机才验证
-        if(china && (!VALID_MOBILE.matcher(mobile).matches())){
+
+        if(!VALID_MOBILE.matcher(mobile).matches()){
             return [code: Code.手机号格式错误]
         }
         def key = KeyUtils.AUTHCODE.registerSms(mobile)
-        String content = china ? SMS_SEND_CONTENT : INTER_SMS_SEND_CONTENT
+        String content = SMS_SEND_CONTENT
         if(type == SmsCode.找回密码.ordinal()){
             key = KeyUtils.AUTHCODE.pwdSms(mobile)
-            content = china ? SMS_SEND_CONTENT_FIND : INTER_SMS_SEND_CONTENT_FIND
+            content = SMS_SEND_CONTENT_FIND
         }else if(type == SmsCode.兑换柠檬.ordinal()){
             key = KeyUtils.AUTHCODE.exchangeSms(mobile)
-            content = china ? SMS_SEND_CONTENT_EXCHANGE : INTER_SMS_SEND_CONTENT_EXCHANGE
+            content = SMS_SEND_CONTENT_EXCHANGE
+        }else if(type == SmsCode.绑定手机号.ordinal()){
+            key = KeyUtils.AUTHCODE.bindMobileSms(mobile)
+            content = SMS_SEND_CONTENT_BIND_MOBILE
         }
         //时间间隔60秒
         if(mainRedis.getExpire(key) > 0
@@ -123,7 +123,7 @@ class AuthCodeController extends BaseController {
         if(!Web.smsSendMobileWithoutReg(mobile))
             return [code : Code.短信验证码每日次数超过限制]
 
-        if(!sendMobile(req, key, mobile, content, china)){
+        if(!sendMobile(req, key, mobile, content)){
             [code: Code.ERROR]
         }
         [code: Code.OK]
@@ -186,6 +186,8 @@ class AuthCodeController extends BaseController {
     public Boolean sendMobile(HttpServletRequest req, String key, String mobile, String content){
         return sendMobile(req, key, mobile, content, Boolean.TRUE)
     }
+
+
 
     public Boolean sendMobile(HttpServletRequest req, String key, String mobile, String content, Boolean china){
         def code = AuthCode.randomNumber(6)
