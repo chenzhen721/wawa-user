@@ -57,6 +57,7 @@ class InfoController extends BaseController {
      * 绑定手机号
      */
     def bindMobile(HttpServletRequest req){
+        logger.debug('Received bindMobile params is {}',req.getParameterMap())
         def id = req['tuid']
         def token = req['access_token']
         def mobile = req['mobile']
