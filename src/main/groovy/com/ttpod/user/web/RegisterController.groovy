@@ -65,7 +65,7 @@ class RegisterController extends BaseController {
             return [code: Code.ERROR]
         }
 
-        logger.debug('user is {}',user)
+        logger.debug('user is {}', user)
         [code: Code.OK, data: [token: user['token']]]
     }
 
@@ -86,7 +86,7 @@ class RegisterController extends BaseController {
                 return [code: Code.用户名已存在, error: '用户名已存在']
             }
             BasicDBObject user = buildUser(username, pwd)
-            if (user == null){
+            if (user == null) {
                 return [code: Code.ERROR]
             }
 
@@ -113,6 +113,20 @@ class RegisterController extends BaseController {
         }
 
         return null
+    }
+
+    /**
+     * 判断手机号是否存在
+     * @param req
+     * @return
+     */
+    def check_mobile(HttpServletRequest req) {
+        String mobile = req['mobile']
+        if (StringUtils.isBlank(mobile)) {
+            return Web.missParam()
+        }
+
+        [code: mobileExist(mobile) ? Code.手机号码已存在 : 1]
     }
 
     /**
