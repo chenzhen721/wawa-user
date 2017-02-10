@@ -108,6 +108,11 @@ public  abstract class KeyUtils {
             return AUTHCODE+ "exchange:sms:" + mobile;
         }
 
+        //绑定手机号
+        public static String bindMobileSms(Object mobile) {
+            return AUTHCODE+ "bindmobile:sms:" + mobile;
+        }
+
         public static String smsLimitTotalPerIp(String ip) {
             return AUTHCODE+ "smsip:"+ip;
         }

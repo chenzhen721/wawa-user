@@ -162,12 +162,15 @@ public abstract class Web  extends WebUtils{
      */
     public static boolean smsCodeVeri(SmsCode smsType,String sms_code, String mobile) {
         String key = KeyUtils.AUTHCODE.registerSms(mobile);
-        if(smsType == SmsCode.注册)
+        if(smsType == SmsCode.注册){
             key = KeyUtils.AUTHCODE.registerSms(mobile);
-        else if(smsType == SmsCode.找回密码)
+        }else if(smsType == SmsCode.找回密码) {
             key = KeyUtils.AUTHCODE.pwdSms(mobile);
-        else if(smsType == SmsCode.兑换柠檬)
+        } else if(smsType == SmsCode.兑换柠檬) {
             key = KeyUtils.AUTHCODE.exchangeSms(mobile);
+        }else if(smsType == SmsCode.绑定手机号){
+            key = KeyUtils.AUTHCODE.bindMobileSms(mobile);
+        }
         String red_code = mainRedis.opsForValue().get(key);
         mainRedis.delete(key);
         //无效验证码

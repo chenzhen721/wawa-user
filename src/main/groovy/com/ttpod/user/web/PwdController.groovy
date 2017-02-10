@@ -1,24 +1,20 @@
 package com.ttpod.user.web
 
-import com.mongodb.BasicDBObject
 import com.mongodb.DBObject
-import com.ttpod.rest.AppProperties
 import com.ttpod.rest.anno.Rest
 import com.ttpod.user.common.util.AuthCode
 import com.ttpod.user.common.util.KeyUtils
 import com.ttpod.user.model.Code
 import com.ttpod.user.model.SmsCode
-import com.ttpod.user.web.BaseController
 import com.ttpod.user.web.api.Web
+import org.apache.commons.lang.StringUtils
 import org.apache.commons.lang.math.NumberUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.apache.commons.lang.StringUtils
 import org.springframework.web.bind.ServletRequestUtils
 
 import javax.annotation.Resource
 import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 import java.util.concurrent.TimeUnit
 
 import static com.ttpod.rest.common.doc.MongoKey._id
@@ -40,11 +36,11 @@ class PwdController extends BaseController {
      * @return
      */
     def find(HttpServletRequest req) {
+        logger.debug('Received find params is {}',req.getParameterMap())
         def mobile = req['mobile']
         def sms_code = req['sms_code']
         def pwd = req['pwd']
-        if(StringUtils.isEmpty(mobile) || StringUtils.isEmpty(sms_code) ||
-                StringUtils.isEmpty(pwd)){
+        if(StringUtils.isBlank(mobile) || StringUtils.isBlank(sms_code) || StringUtils.isBlank(pwd)){
             return [code: Code.参数无效]
         }
         /*if(!VALID_MOBILE.matcher(mobile).matches()){
@@ -62,9 +58,11 @@ class PwdController extends BaseController {
         String new_password = MD5.digest2HEX(pwd + id)
         String newToken = generateToken(pwd + id)
         def uid =  NumberUtils.isNumber(id.toString()) ? id as Integer : id as String
-        if(users().update($$(_id, uid),
-                $$($set:$$('pwd': new_password, token:newToken)), false, false , writeConcern).getN() == 1){
-            pwd_logs().insert($$(uid:uid, type:"find", timestamp:System.currentTimeMillis()))
+        def query = $$('_id',uid)
+        def update_query = $$($set:$$('pwd': new_password, token:newToken))
+        if(users().update(query,update_query).getN() == 1){
+            def insert_query = $$('uid':uid,'type':'find','timestamp':System.currentTimeMillis())
+            pwd_logs().insert(insert_query)
             return [code : Code.OK, data: [token:newToken, old_token:old_token]]
         }
 
