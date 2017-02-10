@@ -17,7 +17,7 @@ build_staging :
 deploy_fabo :
     stage : deploy
     script :
-        - md5sum target/star-user.war |awk '{print $1}' > target/star-user.war.md5
+        ##- md5sum target/star-user.war |awk '{print $1}' > target/star-user.war.md5
         - /opt/ci-shell/2.0/deploy-git --from=$CI_PROJECT_DIR/target/star-user.wa*  --target=192.168.31.251:online/aiuser.api.com.git --clean=false
     only :
         - master
