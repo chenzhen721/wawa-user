@@ -112,7 +112,7 @@
                 <groovy-scope>provided</groovy-scope>
                 <aspectj-scope>provided</aspectj-scope>
                 <!-- replset-->
-                <mongo.uri>192.168.2.17：10000,192.168.2.18：10000,192.168.2.19：10000</mongo.uri>
+                <mongo.uri>192.168.2.17:10000,192.168.2.18:10000,192.168.2.19:10000</mongo.uri>
                 <mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write>
             </properties>
         </profile>
