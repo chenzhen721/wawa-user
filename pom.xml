@@ -99,8 +99,8 @@
         <profile>
             <id>product</id>
             <properties>
-                <redis.host>192.168.1.100</redis.host>
-                <redis.port>6385</redis.port>
+                <redis.host>192.168.2.15</redis.host>
+                <redis.port>6382</redis.port>
                 <redis.pool.maxActive>500</redis.pool.maxActive>
                 <redis.pool.maxIdle>500</redis.pool.maxIdle>
                 <redis.pool.maxWait>-1</redis.pool.maxWait>
@@ -112,7 +112,7 @@
                 <groovy-scope>provided</groovy-scope>
                 <aspectj-scope>provided</aspectj-scope>
                 <!-- replset-->
-                <mongo.uri>192.168.1.37:10000,192.168.1.38:10000,192.168.1.47:10000</mongo.uri>
+                <mongo.uri>192.168.2.17：10000,192.168.2.18：10000,192.168.2.19：10000</mongo.uri>
                 <mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write>
             </properties>
         </profile>
