@@ -17,7 +17,6 @@ build_staging :
 deploy_fabo :
     stage : deploy
     script :
-        - pwd
         - md5sum target/star-user.war |awk '{print $1}' > target/star-user.war.md5
         - /opt/ci-shell/2.0/to-git --rsync-from=target/star-user.wa*  --git-repository=online/aiwan.user.api.com.git  --clean=false
     only :
