@@ -96,7 +96,6 @@
             </properties>
         </profile>
 
-        
         <profile>
             <id>product</id>
             <properties>
