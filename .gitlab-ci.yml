@@ -14,7 +14,7 @@ build_staging :
         - dev
     tags :
         - java-shell
- deploy_fabu :
+deploy_fabo :
     stage : deploy
     script :
         - md5sum target/star-user.war |awk '{print $1}' > target/star-user.war.md5
