@@ -151,30 +151,6 @@ class AuthCodeController extends BaseController {
     }
 
     /**
-     * 2015/5/11 启动亿美软通支持
-     * 2016/7/7 停用
-     */
- /*   public Boolean old_sendMobile(HttpServletRequest req, String key, String mobile, String content){
-        def code = AuthCode.randomNumber(6)
-        mainRedis.opsForValue().set(key, code, SEND_MOBILE_EXPIRES, TimeUnit.SECONDS)
-
-        //发送手机验证码
-        content = content.replace("{code}", code)
-        try {
-            String[] mobiles = [mobile] as String[]
-            int retCode =  SingletonClient.getClient().sendSMS(mobiles, content, "",5);
-            logger.info("ip: {}, send sms mobile: {}, retCode:{}", Web.getClientId(req), mobile, retCode)
-            if(retCode == 0){
-                return Boolean.TRUE
-            }
-        }catch (Exception e){
-            logger.error("send sms code error: {}", e)
-            return Boolean.FALSE
-        }
-        return Boolean.FALSE
-    }
-*/
-    /**
      * 2016/7/7 启用
      * 创蓝短信验证码
      * @param req
@@ -200,7 +176,7 @@ class AuthCodeController extends BaseController {
             String retCode= HttpSender.batchSend(sendMobile, content)
             String ip = Web.getClientId(req)
             logger.info("[ip: {}, send sms mobile: {}, retCode:{}]", ip, mobile, retCode)
-            if(retCode.equals("0")){
+            if(retCode == "0"){
                 try{
                     logger.debug("insert logs")
                     smscode_los().insert($$(mobile:mobile, "used":Boolean.FALSE, "sms_code":code, ip : ip, timestamp:System.currentTimeMillis(),

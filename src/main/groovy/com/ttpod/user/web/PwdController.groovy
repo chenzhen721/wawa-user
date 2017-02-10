@@ -1,24 +1,20 @@
 package com.ttpod.user.web
 
-import com.mongodb.BasicDBObject
 import com.mongodb.DBObject
-import com.ttpod.rest.AppProperties
 import com.ttpod.rest.anno.Rest
 import com.ttpod.user.common.util.AuthCode
 import com.ttpod.user.common.util.KeyUtils
 import com.ttpod.user.model.Code
 import com.ttpod.user.model.SmsCode
-import com.ttpod.user.web.BaseController
 import com.ttpod.user.web.api.Web
+import org.apache.commons.lang.StringUtils
 import org.apache.commons.lang.math.NumberUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.apache.commons.lang.StringUtils
 import org.springframework.web.bind.ServletRequestUtils
 
 import javax.annotation.Resource
 import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 import java.util.concurrent.TimeUnit
 
 import static com.ttpod.rest.common.doc.MongoKey._id
