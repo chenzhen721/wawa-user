@@ -2,6 +2,8 @@ package com.bcloud.msg;
 
 import com.ttpod.rest.common.util.http.HttpClientUtil4_3;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URLEncoder;
 
@@ -9,6 +11,9 @@ import java.net.URLEncoder;
  * 创蓝发送验证码接口
  */
 public class HttpSender {
+
+    static final Logger logger = LoggerFactory.getLogger(HttpSender.class);
+
 
     private static final String ACCOUNT = "N1208146";
 
@@ -41,6 +46,7 @@ public class HttpSender {
 
         if (StringUtils.isNotBlank(mobile)) {
             msg = MSG_SIGN + msg;
+            logger.info("msg is " + msg);
             String encode = URLEncoder.encode(msg, "UTF-8");
             String url = API_URL + "&mobile=" + mobile + "&needstatus=" + NEED_STATUS + "&msg=" + encode;
             String resp = HttpClientUtil4_3.get(url, null, HttpClientUtil4_3.UTF8);
