@@ -52,7 +52,13 @@ class Controller extends BaseController {
             return [code: Code.用户名或密码不正确]
         }
 
-        [code: Code.OK, data: [token: user['token']]]
+        def first_login = Boolean.FALSE
+        def mission = user['mission']
+        if(mission != null && mission['first_login']){
+            first_login = Boolean.TRUE
+        }
+        logger.debug('first_login is {}',first_login)
+        [code: Code.OK, data: [token: user['token'],first_login:first_login]]
     }
 
     /**
