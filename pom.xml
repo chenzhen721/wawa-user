@@ -87,7 +87,7 @@
                 <log.web.level>DEBUG</log.web.level>
                 <groovy-scope>provided</groovy-scope>
                 <aspectj-scope>provided</aspectj-scope>
-                <pic.domain>http://test.img.sumeme.com/</pic.domain>
+                <pic.domain>http://test.aiimg.sumeme.com/</pic.domain>
                 <api.domain>http://test-aiuser.memeyule.com/</api.domain>
                 <site.domain>http://www.aiwanzhibo.com/</site.domain>
                 <!-- replset-->
