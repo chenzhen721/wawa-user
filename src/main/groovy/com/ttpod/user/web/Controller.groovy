@@ -52,7 +52,14 @@ class Controller extends BaseController {
             return [code: Code.用户名或密码不正确]
         }
 
-        [code: Code.OK, data: [token: user['token']]]
+        // 新用户首次领取免费阳光
+        Boolean first_award = Boolean.FALSE
+        def mission = user['mission']
+        if(mission != null){
+            first_award = mission['first_award'] == null ? Boolean.FALSE : Boolean.TRUE
+        }
+
+        [code: Code.OK, data: [token: user['token'],first_award:first_award]]
     }
 
     /**

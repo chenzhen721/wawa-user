@@ -66,7 +66,7 @@ public abstract class BaseController extends ControllerSupport7 {
 
     public static final Pattern VALID_EMAIL= Pattern.compile("^(\\w)+(\\.\\w+)*@(\\w)+((\\.\\w+)+)$");
 
-    public static final BasicDBObject USER_FIELD = new BasicDBObject("token",1).append("pwd",1);
+    public static final BasicDBObject USER_FIELD = new BasicDBObject("token",1).append("pwd",1).append("mission",1);
 
     private static final String MM_KEY = "mm#&*0630";
 

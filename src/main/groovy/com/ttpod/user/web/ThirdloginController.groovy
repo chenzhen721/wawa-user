@@ -157,8 +157,14 @@ class ThirdloginController extends BaseController {
                 return [code: Code.ERROR]
         }
 
-        logger.debug('user is {},first_login is {}',user,first_login)
-        return [code: Code.OK, data: [token: user['token'], first_login: first_login]]
+        // 新用户首次领取免费阳光
+        Boolean first_award = Boolean.FALSE
+        def mission = user['mission']
+        if(mission != null){
+            first_award = mission['first_award'] == null ? Boolean.FALSE : Boolean.TRUE
+        }
+
+        return [code: Code.OK, data: [token: user['token'], first_login: first_login,first_award:first_award]]
     }
 
     /**
@@ -211,8 +217,14 @@ class ThirdloginController extends BaseController {
                 return [code: Code.ERROR]
         }
 
+        // 新用户首次领取免费阳光
+        Boolean first_award = Boolean.FALSE
+        def mission = user['mission']
+        if(mission != null){
+            first_award = mission['first_award'] == null ? Boolean.FALSE : Boolean.TRUE
+        }
 
-        return [code: Code.OK, data: [token: user['token'], first_login: first_login, openid: openid]]
+        return [code: Code.OK, data: [token: user['token'], first_login: first_login, openid: openid,first_award:first_award]]
     }
 
 

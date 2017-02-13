@@ -49,7 +49,7 @@
         <redis.pool.testOnBorrow>true</redis.pool.testOnBorrow>
         <redis.pool.testOnReturn>true</redis.pool.testOnReturn>
         <aspectj-scope>compile</aspectj-scope>
-        <mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>
+        <mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write>
     </properties>
 
     <profiles>
@@ -58,8 +58,9 @@
             <properties>
                 <redis.port>6379</redis.port>
                 <redis.host>192.168.31.246</redis.host>
-                <mongo.uri>192.168.31.246:27017</mongo.uri>
-                <api.domain>http://user.memeyule.com/</api.domain>
+                <mongo.uri>192.168.31.246:27000</mongo.uri>
+                <mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>
+                <api.domain>http://aiuser.memeyule.com/</api.domain>
             </properties>
 
             <activation>
@@ -87,7 +88,7 @@
                 <log.web.level>DEBUG</log.web.level>
                 <groovy-scope>provided</groovy-scope>
                 <aspectj-scope>provided</aspectj-scope>
-                <pic.domain>http://test.img.sumeme.com/</pic.domain>
+                <pic.domain>http://test.aiimg.sumeme.com/</pic.domain>
                 <api.domain>http://test-aiuser.memeyule.com/</api.domain>
                 <site.domain>http://www.aiwanzhibo.com/</site.domain>
                 <!-- replset-->
