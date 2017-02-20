@@ -60,7 +60,7 @@
                 <redis.host>192.168.31.246</redis.host>
                 <mongo.uri>192.168.31.246:27000</mongo.uri>
                 <mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>
-                <api.domain>http://aiuser.memeyule.com/</api.domain>
+                <api.domain>http://test-aiuser.memeyule.com/</api.domain>
             </properties>
 
             <activation>

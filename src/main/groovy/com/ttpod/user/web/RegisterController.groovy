@@ -76,42 +76,22 @@ class RegisterController extends BaseController {
     def robot(HttpServletRequest req) {
         if(isTest){
             def username = req['username']
+            def mobile = req['mobile']
             def pwd = req['pwd']
-            if(StringUtils.isEmpty(username) || StringUtils.isEmpty(pwd)){
+            if(StringUtils.isEmpty(username) && StringUtils.isEmpty(mobile)){
                 return [code: Code.参数无效]
             }
             //用户名是否已经存在
             if(userNameExist(username)){
                 return [code: Code.用户名已存在, error:'用户名已存在']
             }
-            DBObject user = buildUser(req, username, null, null, pwd,null,null)
+            DBObject user = buildUser(req, username, mobile, null, pwd,null,null)
             if(user == null)
                 return [code: Code.ERROR]
 
             [code: Code.OK, data: [access_token:user['token'], _id:user[_id]]]
         }
 
-    }
-
-    /**
-     * 创建用户
-     * @param username
-     * @param pwd
-     * @return
-     */
-    private BasicDBObject buildUser(String mobile, String pwd) {
-        def now = new Date().getTime()
-        def userId = userKGS.nextId()
-        def token = generateToken(pwd + userId) as String
-        def password = MD5.digest2HEX(pwd + userId)
-        def pic = User.DEFAULT_PIC
-        def user = $$('_id': userId, 'nickname': buildDefaultNickName(),
-                'mobile': mobile, 'pwd': password, 'regTime': now, 'token': token, 'via': 'mobile', 'pic': pic)
-        if (!users().insert(user).getN()) {
-            return user
-        }
-
-        return null
     }
 
     static final String[] USER_INFO_FIELD=["qd", "via", "from", "pic", "nickname", "invite_code", "email"]
