@@ -28,20 +28,8 @@
 
     <mongo:db-factory dbname="xy_user" id="userFactory" mongo-ref="mongo" />
 
-    <!--<mongo:db-factory dbname="xy" id="userFactory" mongo-ref="mongo" write-concern="REPLICA_ACKNOWLEDGED" />-->
-
     <bean id="userMongo" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg ref="userFactory"/>
     </bean>
-
-
-
-
-    <!--<bean id="gMongo" class="com.gmongo.GMongo">-->
-        <!--<constructor-arg ref="mongo"/>-->
-    <!--</bean>-->
-
-
-
 
 </beans>

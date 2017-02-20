@@ -33,8 +33,8 @@
 
         <log.target>stdout</log.target>
         <log.web.level>DEBUG</log.web.level>
-        <pic.domain>http://img.sumeme.com/</pic.domain>
-        <api.domain>http://user.memeyule.com/</api.domain>
+        <pic.domain>https://aiimg.sumeme.com/</pic.domain>
+        <api.domain>http://aiuser.memeyule.com/</api.domain>
         <site.domain>http://www.aiwanzhibo.com/</site.domain>
         <pic.folder>c:/upload/</pic.folder>
 
