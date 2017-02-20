@@ -155,22 +155,22 @@ class InfoController extends BaseController {
      */
     def bindUserName(HttpServletRequest req){
         def token = req['access_token']
-        def userName = req['username']
+        def user_name = req['username']
         def pwd = req['pwd']
-        if(StringUtils.isEmpty(userName) ||StringUtils.isEmpty(token)){
+        if(StringUtils.isEmpty(user_name) ||StringUtils.isEmpty(token)){
             return [code: Code.参数无效]
         }
-        if(!VALID_USERNAME.matcher(userName).matches()){
+        if(!VALID_USERNAME.matcher(user_name).matches()){
             return [code: Code.用户名格式错误]
         }
-        if(users().count($$(userName: userName.toLowerCase())) > 0){
+        if(users().count($$(user_name: user_name.toLowerCase())) > 0){
             return [code : Code.用户名已存在]
         }
         DBObject user = users().findOne($$('token':token),USER_FIELD)
         if(user == null)
             return [code : Code.参数无效]
 
-        def updateInfo = $$('userName': userName.toLowerCase())
+        def updateInfo = $$('user_name': user_name.toLowerCase())
 
         if(StringUtils.isNotEmpty(pwd)){
             if(!VALID_PWD.matcher(pwd).matches()){

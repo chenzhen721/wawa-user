@@ -116,7 +116,7 @@ class RegisterController extends BaseController {
 
     static final String[] USER_INFO_FIELD=["qd", "via", "from", "pic", "nickname", "invite_code", "email"]
 
-    private DBObject buildUser(HttpServletRequest req, String userName, String mobile, String cid,
+    private DBObject buildUser(HttpServletRequest req, String user_name, String mobile, String cid,
                                String pwd, String u_id, String mm_no){
         Object user_id = null
         if(StringUtils.isNotEmpty(u_id)){
@@ -129,8 +129,8 @@ class RegisterController extends BaseController {
         DBObject info  = new BasicDBObject(_id, user_id)
 
         info.put('nickname',buildDefaultNickName())
-        if(StringUtils.isNotEmpty(userName)){
-            info.put('userName',userName.toLowerCase())
+        if(StringUtils.isNotEmpty(user_name)){
+            info.put('user_name',user_name.toLowerCase())
         }
         if(StringUtils.isNotEmpty(mobile))
             info.put('mobile',mobile)
@@ -193,7 +193,7 @@ class RegisterController extends BaseController {
      * @return
      */
     private boolean userNameExist(String userName) {
-        return users().count($$('userName': userName.toLowerCase())) > 0
+        return users().count($$('user_name': userName.toLowerCase())) > 0
     }
 
     /**
