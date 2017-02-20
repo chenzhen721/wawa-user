@@ -52,14 +52,7 @@ class Controller extends BaseController {
             return [code: Code.用户名或密码不正确]
         }
 
-        // 新用户首次领取免费阳光
-        Boolean first_award = Boolean.FALSE
-        def mission = user['mission']
-        if(mission != null){
-            first_award = mission['first_award'] == null ? Boolean.FALSE : Boolean.TRUE
-        }
-
-        [code: Code.OK, data: [token: user['token'],first_award:first_award]]
+        [code: Code.OK, data: [token: user['token']]]
     }
 
     /**
@@ -74,7 +67,7 @@ class Controller extends BaseController {
         if (StringUtils.isBlank(login_name) || StringUtils.isBlank(password)) {
             return [code: Code.参数无效]
         }
-        DBObject user = users().findOne($$('userName': login_name.toLowerCase()), USER_FIELD)
+        DBObject user = users().findOne($$('user_name': login_name.toLowerCase()), USER_FIELD)
         if (user == null) {
             return [code: Code.用户名或密码不正确]
         }
@@ -94,14 +87,14 @@ class Controller extends BaseController {
         if (StringUtils.isBlank(access_token)) {
             return [code: Code.参数无效]
         }
-        DBObject user = users().findOne($$('token': access_token), $$(pic: 1, userName: 1, mobile: 1, via: 1, nickname: 1, invite_code: 1, email: 1))
+        DBObject user = users().findOne($$('token': access_token), $$(pic: 1, user_name: 1, mobile: 1, via: 1, nickname: 1, invite_code: 1, email: 1))
         if (user == null)
             return [code: Code.ERROR]
 
-        def user_name = user['userName'] ?: user['mobile'] ?: user['nickname']
+        def user_name = user['user_name'] ?: user['mobile'] ?: user['nickname']
         def nickname = user['nickname']
         def mobile_bind = StringUtils.isNotEmpty((user['mobile'] ?: "") as String)
-        def uname_bind = StringUtils.isNotEmpty((user['userName'] ?: "") as String)
+        def uname_bind = StringUtils.isNotEmpty((user['user_name'] ?: "") as String)
         [code: Code.OK, data: [tuid       : user['_id'], user_name: user_name, uname_bind: uname_bind, nickname: nickname, email: user['email'],
                                mobile_bind: mobile_bind, via: user['via'], pic: user['pic'], mobile: user['mobile'], invite_code: user['invite_code']]]
     }

@@ -1,6 +1,7 @@
 package com.ttpod.user.web
 
 import com.mongodb.BasicDBObject
+import com.mongodb.DBObject
 import com.ttpod.rest.anno.Rest
 import com.ttpod.user.common.util.AuthCode
 import com.ttpod.user.model.Code
@@ -26,7 +27,7 @@ class RegisterController extends BaseController {
 
     Logger logger = LoggerFactory.getLogger(RegisterController.class)
 
-    static final boolean isTest = API_DOMAIN.contains("test.")
+    static final boolean isTest = API_DOMAIN.contains("test-")
 
     private final static String NICK_NAME_PREFIX = "萌新"
 
@@ -60,12 +61,10 @@ class RegisterController extends BaseController {
             return [code: Code.手机号码已存在]
         }
 
-        def user = buildUser(mobile, pwd) as BasicDBObject
-        if (user == null) {
+        DBObject user = buildUser(req, null, mobile, null, pwd, null,null)
+        if(user == null)
             return [code: Code.ERROR]
-        }
 
-        logger.debug('user is {}', user)
         [code: Code.OK, data: [token: user['token']]]
     }
 
@@ -75,46 +74,80 @@ class RegisterController extends BaseController {
      * @return
      */
     def robot(HttpServletRequest req) {
-        if (isTest) {
+        if(isTest){
             def username = req['username']
+            def mobile = req['mobile']
             def pwd = req['pwd']
-            if (StringUtils.isBlank(username) || StringUtils.isBlank(pwd)) {
+            if(StringUtils.isEmpty(username) && StringUtils.isEmpty(mobile)){
                 return [code: Code.参数无效]
             }
             //用户名是否已经存在
-            if (userNameExist(username)) {
-                return [code: Code.用户名已存在, error: '用户名已存在']
+            if(StringUtils.isNotEmpty(username) && userNameExist(username)){
+                return [code: Code.用户名已存在, error:'用户名已存在']
             }
-            BasicDBObject user = buildUser(username, pwd)
-            if (user == null) {
+            if(StringUtils.isNotEmpty(mobile) &&mobileExist(mobile)) {
+                return [code: Code.手机号码已存在, error:'手机号已经存在']
+            }
+            DBObject user = buildUser(req, username, mobile, null, pwd,null,null)
+            if(user == null)
                 return [code: Code.ERROR]
+
+            [code: Code.OK, data: [access_token:user['token'], _id:user[_id]]]
+        }
+
+    }
+
+    static final String[] USER_INFO_FIELD=["qd", "via", "from", "pic", "nickname", "invite_code", "email"]
+
+    private DBObject buildUser(HttpServletRequest req, String user_name, String mobile, String cid,
+                               String pwd, String u_id, String mm_no){
+        Object user_id = null
+        if(StringUtils.isNotEmpty(u_id)){
+            user_id = u_id
+        }
+        else{
+            user_id = userKGS.nextId()
+        }
+        logger.debug("buildUser user_id : {}", user_id)
+        DBObject info  = new BasicDBObject(_id, user_id)
+
+        info.put('nickname',buildDefaultNickName())
+        if(StringUtils.isNotEmpty(user_name)){
+            info.put('user_name',user_name.toLowerCase())
+        }
+        if(StringUtils.isNotEmpty(mobile))
+            info.put('mobile',mobile)
+        if(StringUtils.isNotEmpty(cid))
+            info.put('cid',cid)
+
+        String password = MD5.digest2HEX(pwd + user_id)
+        long time = System.currentTimeMillis()
+        info.put('regTime',time)
+        info.put('pwd',password)
+        String token = generateToken(password + user_id)
+        info.put('token',token)
+        if(StringUtils.isEmpty(info['pic'] as String))
+            info.put("pic", User.DEFAULT_PIC)
+        if(StringUtils.isNotEmpty(mm_no))
+            info.put('mm_no',mm_no)
+
+        for(String field : USER_INFO_FIELD){
+            if(StringUtils.isNotEmpty(req.getParameter(field)))
+                info.put(field,req.getParameter(field))
+        }
+        if(StringUtils.isEmpty(info['via'] as String))
+            info.put('via','local')
+        try{
+            if(users().count($$(_id: user_id)) == 0 &&
+                    users().update($$(_id: user_id),info, true, false, writeConcern).getN() != 1){
+                return null
             }
-
-            [code: Code.OK, data: [access_token: user['token'], _id: user['_id']]]
+        }catch(Exception e){
+            logger.error("register buildUser error :{}", e)
+            return null
         }
+        return info
     }
-
-    /**
-     * 创建用户
-     * @param username
-     * @param pwd
-     * @return
-     */
-    private BasicDBObject buildUser(String username, String pwd) {
-        def now = new Date().getTime()
-        def userId = userKGS.nextId()
-        def token = generateToken(pwd + userId) as String
-        def password = MD5.digest2HEX(pwd + userId)
-        def pic = User.DEFAULT_PIC
-        def user = $$('_id': userId, 'nickname': buildDefaultNickName(),
-                'mobile': username, 'pwd': password, 'regTime': now, 'token': token, 'via': 'mobile', 'pic': pic, 'username': username)
-        if (!users().insert(user).getN()) {
-            return user
-        }
-
-        return null
-    }
-
     /**
      * 判断手机号是否存在
      * @param req
@@ -143,7 +176,7 @@ class RegisterController extends BaseController {
      * @return
      */
     private boolean userNameExist(String userName) {
-        return users().count($$('userName': userName.toLowerCase())) > 0
+        return users().count($$('user_name': userName.toLowerCase())) > 0
     }
 
     /**

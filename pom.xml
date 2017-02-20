@@ -33,8 +33,8 @@
 
         <log.target>stdout</log.target>
         <log.web.level>DEBUG</log.web.level>
-        <pic.domain>http://img.sumeme.com/</pic.domain>
-        <api.domain>http://user.memeyule.com/</api.domain>
+        <pic.domain>https://aiimg.sumeme.com/</pic.domain>
+        <api.domain>http://aiuser.memeyule.com/</api.domain>
         <site.domain>http://www.aiwanzhibo.com/</site.domain>
         <pic.folder>c:/upload/</pic.folder>
 
@@ -60,7 +60,7 @@
                 <redis.host>192.168.31.246</redis.host>
                 <mongo.uri>192.168.31.246:27000</mongo.uri>
                 <mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>
-                <api.domain>http://aiuser.memeyule.com/</api.domain>
+                <api.domain>http://test-aiuser.memeyule.com/</api.domain>
             </properties>
 
             <activation>
