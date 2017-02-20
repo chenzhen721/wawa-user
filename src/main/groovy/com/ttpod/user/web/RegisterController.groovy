@@ -27,7 +27,7 @@ class RegisterController extends BaseController {
 
     Logger logger = LoggerFactory.getLogger(RegisterController.class)
 
-    static final boolean isTest = API_DOMAIN.contains("test.")
+    static final boolean isTest = API_DOMAIN.contains("test-")
 
     private final static String NICK_NAME_PREFIX = "萌新"
 
