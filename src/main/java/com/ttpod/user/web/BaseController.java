@@ -60,7 +60,7 @@ public abstract class BaseController extends ControllerSupport7 {
 
     public static final Pattern VALID_USERNAME = Pattern.compile("^(?!^\\d+$)[0-9a-zA-Z_]{6,14}$");
 
-    public static final Pattern VALID_PWD = Pattern.compile("^\\S{6,20}$");
+    public static final Pattern VALID_PWD = Pattern.compile("^[\\w~!@#$%^&*()+`='{}<>,./\\?\\\\\\|\\[\\]\\-;:'\"]{6,20}$");
 
     public static final Pattern VALID_MOBILE = Pattern.compile("^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\\d{8}$");
 
