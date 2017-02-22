@@ -175,7 +175,7 @@ class AuthCodeController extends BaseController {
             String[] sendMobile = [mobile]
             String retCode= HttpSender.batchSend(sendMobile, content)
             String ip = Web.getClientId(req)
-            logger.info("[ip: {}, send sms mobile: {}, retCode:{}]", ip, mobile, retCode)
+            logger.info("[ip: {}, send sms mobile: {} : {}, retCode:{}]", ip, mobile, code, retCode)
             if(retCode == "0"){
                 try{
                     logger.debug("insert logs")
