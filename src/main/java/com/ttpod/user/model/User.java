@@ -34,7 +34,7 @@ public interface User {
     /**
      * 默认头像
      */
-    String DEFAULT_PIC = "https://aiimg.sumeme.com/22/6/1403510731734.jpg";
+    String DEFAULT_PIC = "https://aiimg.sumeme.com/45/5/1487645253037.png";
 
 
     interface VIP {

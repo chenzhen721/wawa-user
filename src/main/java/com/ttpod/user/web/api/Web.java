@@ -192,11 +192,11 @@ public abstract class Web  extends WebUtils{
 
     static final String TOTAL_LGOIN_PER_IP = "5";
 
-    static final String TOTAL_SMSSEND_PER_IP = "20";
+    static final String TOTAL_SMSSEND_PER_IP = "30";
 
-    static final String TOTAL_SMSSENDPER_MOBILE = "5";
+    static final String TOTAL_SMSSENDPER_MOBILE = "10";
 
-    static final Long TOTAL_SMS_SEND_MOBILE = 10l;
+    static final Long TOTAL_SMS_SEND_MOBILE = 20l;
 
     /**
      * 每天IP发送短信验证码次数

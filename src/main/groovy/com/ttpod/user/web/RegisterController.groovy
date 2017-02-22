@@ -45,8 +45,7 @@ class RegisterController extends BaseController {
         if (StringUtils.isBlank(mobile) || StringUtils.isBlank(sms_code) || StringUtils.isBlank(pwd)) {
             return Web.missParam()
         }
-
-        if (pwd.length() < 6 || pwd.length() >= 12) {
+        if(!VALID_PWD.matcher(pwd).matches()){
             return [code: Code.密码格式错误]
         }
         if (!VALID_MOBILE.matcher(mobile).matches()) {
