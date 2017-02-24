@@ -339,8 +339,8 @@ public abstract class Web  extends WebUtils{
         if(StringUtils.isBlank(ip)){
             ip = req.getRemoteAddr();
         }
-        ip = StringUtils.remove(ip, "192.168.1.34");
-        ip = StringUtils.remove(ip, "192.168.1.35");
+        ip = StringUtils.remove(ip, ", 192.168.2.21");
+        ip = StringUtils.remove(ip, ", 192.168.2.20");
         return ip;
     }
 
