@@ -58,10 +58,13 @@ class ThirdloginController extends BaseController {
      * @param req
      */
     def qq(HttpServletRequest req, HttpServletResponse response) {
+        /*TODO 暂时关闭第三方登录
         logger.debug('Received qq params is {}',req.getParameterMap())
         String appId = ServletRequestUtils.getStringParameter(req, "app_id", QQ_APP_ID)
         String key = QQ_APP_ID_KEYS[appId]
         return qq_login(req, response, appId, key)
+*/
+        return [code: Code.ERROR]
     }
 
     /**
@@ -69,9 +72,12 @@ class ThirdloginController extends BaseController {
      * @param req
      */
     def weixin(HttpServletRequest req, HttpServletResponse response) {
+        /*TODO 暂时关闭第三方登录
         logger.debug('Received weixin params is {}',req.getParameterMap())
         def token_url = "${WEIXIN_URL}oauth2/access_token?grant_type=authorization_code&appid=${WEIXIN_APP_ID}&secret=${WEIXIN_APP_SECRET}"
         return weixin_login(req, response, token_url)
+*/
+        return [code: Code.ERROR]
     }
 
     /**
@@ -79,8 +85,11 @@ class ThirdloginController extends BaseController {
      * @param req
      */
     def weixin_h5(HttpServletRequest req, HttpServletResponse response) {
+        /*TODO 暂时关闭第三方登录
         def token_url = "${WEIXIN_URL}oauth2/access_token?grant_type=authorization_code&appid=${WEIXIN_H5_APP_ID}&secret=${WEIXIN_H5_APP_SECRET}"
         return weixin_login(req, response, token_url)
+*/
+        return [code: Code.ERROR]
     }
 
     /**
