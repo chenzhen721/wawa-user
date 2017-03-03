@@ -31,7 +31,7 @@ import static com.ttpod.rest.common.doc.MongoKey._id;
 public abstract class Web  extends WebUtils{
 
 
-    public static final boolean isTest = AppProperties.get("api.domain").contains("test.");
+    public static final boolean isTest = AppProperties.get("api.domain").contains("test-");
 
     final static  Logger logger = LoggerFactory.getLogger(Web.class) ;
     /**
@@ -192,11 +192,11 @@ public abstract class Web  extends WebUtils{
 
     static final String TOTAL_LGOIN_PER_IP = "5";
 
-    static final String TOTAL_SMSSEND_PER_IP = "20";
+    static final String TOTAL_SMSSEND_PER_IP = "30";
 
-    static final String TOTAL_SMSSENDPER_MOBILE = "5";
+    static final String TOTAL_SMSSENDPER_MOBILE = "10";
 
-    static final Long TOTAL_SMS_SEND_MOBILE = 10l;
+    static final Long TOTAL_SMS_SEND_MOBILE = 20l;
 
     /**
      * 每天IP发送短信验证码次数
@@ -339,8 +339,8 @@ public abstract class Web  extends WebUtils{
         if(StringUtils.isBlank(ip)){
             ip = req.getRemoteAddr();
         }
-        ip = StringUtils.remove(ip, "192.168.1.34");
-        ip = StringUtils.remove(ip, "192.168.1.35");
+        ip = StringUtils.remove(ip, ", 192.168.2.21");
+        ip = StringUtils.remove(ip, ", 192.168.2.20");
         return ip;
     }
 
