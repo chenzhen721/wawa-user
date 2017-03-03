@@ -92,7 +92,7 @@
                 <api.domain>http://test-aiuser.memeyule.com/</api.domain>
                 <site.domain>http://www.aiwanzhibo.com/</site.domain>
                 <!-- replset-->
-                <mongo.uri>192.168.31.231:10000,192.168.31.236:10000,192.168.31.231:10001</mongo.uri>
+                <mongo.uri>192.168.31.231:20000,192.168.31.236:20000,192.168.31.231:20001</mongo.uri>
                 <mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write>
             </properties>
         </profile>
