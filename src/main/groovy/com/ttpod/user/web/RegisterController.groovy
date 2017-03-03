@@ -90,7 +90,7 @@ class RegisterController extends BaseController {
         if(user == null)
             return [code: Code.ERROR]
 
-        [code: Code.OK, data: [access_token:user['token'], _id:user[_id], nick_name:user['nickname']]]
+        [code: Code.OK, data: [access_token:user['token'], _id:user[_id], nick_name:user['nickname'], pic:user['pic']]]
 
     }
 
