@@ -31,7 +31,7 @@ import static com.ttpod.rest.common.doc.MongoKey._id;
 public abstract class Web  extends WebUtils{
 
 
-    public static final boolean isTest = AppProperties.get("api.domain").contains("test.");
+    public static final boolean isTest = AppProperties.get("api.domain").contains("test-");
 
     final static  Logger logger = LoggerFactory.getLogger(Web.class) ;
     /**
