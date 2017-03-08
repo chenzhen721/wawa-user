@@ -1,0 +1,44 @@
+package com.ttpod.user.common.msg;
+
+import com.ttpod.rest.common.util.http.HttpClientUtil4_3;
+import org.apache.commons.lang.StringUtils;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.StringReader;
+
+/**
+ * 梦网发送验证码接口
+ */
+public class MontnetSmsUtil {
+
+    static Logger logger = LoggerFactory.getLogger(MontnetSmsUtil.class);
+    private static final String userId = "JS2601";
+    private static final String password = "102356";
+    private static final String api_url = "http://61.145.229.26:8086/MWGate/wmgw.asmx/MongateCsSpSendSmsNew?userId=" + userId + "&password=" + password + "&pszMobis=%s&pszMsg=%s&iMobiCount=1&pszSubPort=*";
+    private static final SAXBuilder saxBuilder = new SAXBuilder();
+
+    public static Boolean send(String mobile, String content) {
+        String url = String.format(api_url, mobile, content);
+        try {
+            String result = HttpClientUtil4_3.get(url, null);
+            Document doc = saxBuilder.build(new StringReader(result));
+            String retCode = doc.getContent(0).getValue();
+            return StringUtils.length(retCode) >= 15 ;
+        } catch (IOException | JDOMException e) {
+            e.printStackTrace();
+        }
+        return Boolean.FALSE;
+    }
+
+    public static void main(String[] args) throws Exception {
+        String mobile = "15021031149";
+//        String msg = "主人,您有一个新的订单.NICK_NAME要您在CALL_TIME叫醒ta.打开甜心叫醒查看详情-甜心叫醒";
+        String msg = "test";
+        System.out.println(send(mobile, msg));
+    }
+}
