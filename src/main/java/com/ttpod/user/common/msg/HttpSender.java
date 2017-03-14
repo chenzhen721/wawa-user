@@ -1,4 +1,4 @@
-package com.bcloud.msg;
+package com.ttpod.user.common.msg;
 
 import com.ttpod.rest.common.util.http.HttpClientUtil4_3;
 import org.apache.commons.lang.StringUtils;

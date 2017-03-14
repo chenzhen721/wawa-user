@@ -1,7 +1,7 @@
 package com.ttpod.user.web
 
 import com.Geetest.util.GeetestUtils
-import com.bcloud.msg.HttpSender
+import com.ttpod.user.common.msg.HttpSender
 import com.ttpod.rest.anno.Rest
 import com.ttpod.user.common.util.AuthCode
 import com.ttpod.user.common.util.KeyUtils

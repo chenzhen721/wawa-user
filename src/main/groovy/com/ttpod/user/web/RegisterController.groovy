@@ -77,26 +77,24 @@ class RegisterController extends BaseController {
      * @return
      */
     def robot(HttpServletRequest req) {
-        if(isTest){
-            def username = req['username']
-            def mobile = req['mobile']
-            def pwd = req['pwd']
-            if(StringUtils.isEmpty(username) && StringUtils.isEmpty(mobile)){
-                return [code: Code.参数无效]
-            }
-            //用户名是否已经存在
-            if(StringUtils.isNotEmpty(username) && userNameExist(username)){
-                return [code: Code.用户名已存在, error:'用户名已存在']
-            }
-            if(StringUtils.isNotEmpty(mobile) &&mobileExist(mobile)) {
-                return [code: Code.手机号码已存在, error:'手机号已经存在']
-            }
-            DBObject user = buildUser(req, username, mobile, null, pwd,null,null)
-            if(user == null)
-                return [code: Code.ERROR]
-
-            [code: Code.OK, data: [access_token:user['token'], _id:user[_id]]]
+        def username = req['username']
+        def mobile = req['mobile']
+        def pwd = req['pwd']
+        if(StringUtils.isEmpty(username) && StringUtils.isEmpty(mobile)){
+            return [code: Code.参数无效]
         }
+        //用户名是否已经存在
+        if(StringUtils.isNotEmpty(username) && userNameExist(username)){
+            return [code: Code.用户名已存在, error:'用户名已存在']
+        }
+        if(StringUtils.isNotEmpty(mobile) &&mobileExist(mobile)) {
+            return [code: Code.手机号码已存在, error:'手机号已经存在']
+        }
+        DBObject user = buildUser(req, username, mobile, null, pwd,null,null)
+        if(user == null)
+            return [code: Code.ERROR]
+
+        [code: Code.OK, data: [access_token:user['token'], _id:user[_id], nick_name:user['nickname'], pic:user['pic']]]
 
     }
 
