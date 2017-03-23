@@ -78,7 +78,7 @@ class AuthCodeController extends BaseController {
     }
 
     private static final Long SEND_MOBILE_LIMIT = 60
-    private static final Long SEND_MOBILE_EXPIRES= 30 * 60L
+    private static final Long SEND_MOBILE_EXPIRES= 10 * 60L
     private static final String SMS_SEND_CONTENT="正在进行手机验证操作，验证码：{code}。请勿将验证码泄露给他人。"
     private static final String SMS_SEND_CONTENT_FIND="正在进行找回密码操作，验证码：{code}。请勿将验证码泄露给他人。"
     private static final String SMS_SEND_CONTENT_EXCHANGE="正在进行兑换柠檬操作，验证码：{code}。请勿将验证码泄露给他人。"

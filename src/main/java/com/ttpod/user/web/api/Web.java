@@ -172,11 +172,11 @@ public abstract class Web  extends WebUtils{
             key = KeyUtils.AUTHCODE.bindMobileSms(mobile);
         }
         String red_code = mainRedis.opsForValue().get(key);
-        mainRedis.delete(key);
         //无效验证码
         if (null == sms_code || !sms_code.equalsIgnoreCase(red_code)) {
             return true;
         }
+        mainRedis.delete(key);
         //标记验证码被使用状态
         try{
             userMongo.getCollection("smscode_logs")
