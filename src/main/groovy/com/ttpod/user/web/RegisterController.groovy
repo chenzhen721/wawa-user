@@ -46,17 +46,21 @@ class RegisterController extends BaseController {
             return Web.missParam()
         }
         if(!VALID_PWD.matcher(pwd).matches()){
+            logger.debug('密码格式错误')
             return [code: Code.密码格式错误]
         }
         if (!VALID_MOBILE.matcher(mobile).matches()) {
+            logger.debug('手机号格式错误')
             return [code: Code.手机号格式错误]
         }
 
         if (Web.smsCodeVeri(SmsCode.注册, req)) {
+            logger.debug('短信验证码无效')
             return [code: Code.短信验证码无效]
         }
 
         if (mobileExist(mobile)) {
+            logger.debug('手机号码已存在')
             return [code: Code.手机号码已存在]
         }
 
