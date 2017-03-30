@@ -206,7 +206,7 @@ class AuthCodeController extends BaseController {
      * @param mobile
      * @param content
      * @param length
-     * @param channel 多短信频道 0创蓝 1梦网
+     * @param channel 多短信频道 1创蓝 0梦网
      * @return
      */
     public Boolean sendMobile(HttpServletRequest req, String key, String mobile, String content, Integer length, Integer channel){
@@ -220,7 +220,7 @@ class AuthCodeController extends BaseController {
             String[] sendMobile = [mobile]
             Boolean success = Boolean.FALSE;
             String retCode;
-            if(channel == 0) {
+            if(channel == 1) {
                 retCode = HttpSender.batchSend(sendMobile, content);
                 success = retCode.equals("0");
             } else {
