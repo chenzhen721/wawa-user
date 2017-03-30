@@ -87,7 +87,9 @@ class AuthCodeController extends BaseController {
 
     def send_mobile(HttpServletRequest req) {
         logger.debug('Received send_mobile params is {}',req.getParameterMap())
+        def length = ServletRequestUtils.getIntParameter(req,'length',0)
         def mobile = req['mobile']
+        //
         Integer type = ServletRequestUtils.getIntParameter(req, "type", SmsCode.注册.ordinal())
         if(StringUtils.isEmpty(mobile)){
             [code : Code.参数无效]
@@ -123,7 +125,7 @@ class AuthCodeController extends BaseController {
         if(!Web.smsSendMobileWithoutReg(mobile))
             return [code : Code.短信验证码每日次数超过限制]
 
-        if(!sendMobile(req, key, mobile, content)){
+        if(!sendMobile(req, key, mobile, content,length)){
             [code: Code.ERROR]
         }
         [code: Code.OK]
@@ -166,7 +168,47 @@ class AuthCodeController extends BaseController {
 
 
     public Boolean sendMobile(HttpServletRequest req, String key, String mobile, String content, Boolean china){
+        // todo 位数由客户端传
         def code = AuthCode.randomNumber(6)
+        mainRedis.opsForValue().set(key, code, SEND_MOBILE_EXPIRES, TimeUnit.SECONDS)
+
+        //发送手机验证码
+        content = content.replace("{code}", code)
+        try {
+            String[] sendMobile = [mobile]
+            String retCode= HttpSender.batchSend(sendMobile, content)
+            String ip = Web.getClientId(req)
+            logger.info("[ip: {}, send sms mobile: {} : {}, retCode:{}]", ip, mobile, code, retCode)
+            if(retCode == "0"){
+                try{
+                    logger.debug("insert logs")
+                    smscode_los().insert($$(mobile:mobile, "used":Boolean.FALSE, "sms_code":code, ip : ip, timestamp:System.currentTimeMillis(),
+                            "type":ServletRequestUtils.getIntParameter(req, "type", SmsCode.注册.ordinal())))
+                }catch (Exception e){
+                    logger.error("record log exception : {}",e)
+                }
+                return Boolean.TRUE
+            }
+        }catch (Exception e){
+            logger.error("send sms code error: {}", e)
+            return Boolean.FALSE
+        }
+        return Boolean.FALSE
+    }
+
+    /**
+     * 重载 发验证码方法
+     * 通过客户端传递参数判断发送多少4/6位
+     * @param req
+     * @param key
+     * @param mobile
+     * @param content
+     * @param length
+     * @return
+     */
+    public Boolean sendMobile(HttpServletRequest req, String key, String mobile, String content, Integer length){
+        def authLength = length == 1 ? 4 : 6
+        def code = AuthCode.randomNumber(authLength)
         mainRedis.opsForValue().set(key, code, SEND_MOBILE_EXPIRES, TimeUnit.SECONDS)
 
         //发送手机验证码
