@@ -3,6 +3,7 @@ package com.ttpod.user.web
 import com.Geetest.util.GeetestUtils
 import com.ttpod.user.common.msg.HttpSender
 import com.ttpod.rest.anno.Rest
+import com.ttpod.user.common.msg.MontnetSmsUtil
 import com.ttpod.user.common.util.AuthCode
 import com.ttpod.user.common.util.KeyUtils
 import com.ttpod.user.model.Code
@@ -115,8 +116,9 @@ class AuthCodeController extends BaseController {
                 && (SEND_MOBILE_EXPIRES - mainRedis.getExpire(key)) <= SEND_MOBILE_LIMIT){
             return [code : Code.短信验证间隔太短]
         }
-        //手机号的限制 如：一个手机号码一天只能发5条
-        if(Web.smsSendMobileLimited(mobile))
+        //手机号的限制 如：一个手机号码一天只能发10条
+        Integer limit = Web.smsSendMobileLimited(mobile)
+        if(limit < 0)
             return [code : Code.短信验证码每日次数超过限制]
         //IP限制，如：一个IP一天只发20条
         if(Web.smsSendIpLimited(req))
@@ -125,7 +127,7 @@ class AuthCodeController extends BaseController {
         if(!Web.smsSendMobileWithoutReg(mobile))
             return [code : Code.短信验证码每日次数超过限制]
 
-        if(!sendMobile(req, key, mobile, content,length)){
+        if(!sendMobile(req, key, mobile, content, length, (limit%2))){
             [code: Code.ERROR]
         }
         [code: Code.OK]
@@ -204,9 +206,10 @@ class AuthCodeController extends BaseController {
      * @param mobile
      * @param content
      * @param length
+     * @param channel 多短信频道 0创蓝 1梦网
      * @return
      */
-    public Boolean sendMobile(HttpServletRequest req, String key, String mobile, String content, Integer length){
+    public Boolean sendMobile(HttpServletRequest req, String key, String mobile, String content, Integer length, Integer channel){
         def authLength = length == 1 ? 4 : 6
         def code = AuthCode.randomNumber(authLength)
         mainRedis.opsForValue().set(key, code, SEND_MOBILE_EXPIRES, TimeUnit.SECONDS)
@@ -215,10 +218,18 @@ class AuthCodeController extends BaseController {
         content = content.replace("{code}", code)
         try {
             String[] sendMobile = [mobile]
-            String retCode= HttpSender.batchSend(sendMobile, content)
+            Boolean success = Boolean.FALSE;
+            String retCode;
+            if(channel == 0) {
+                retCode = HttpSender.batchSend(sendMobile, content);
+                success = retCode.equals("0");
+            } else {
+                retCode = MontnetSmsUtil.send(mobile, content);
+                success = !retCode || retCode.length() < 15
+            }
             String ip = Web.getClientId(req)
-            logger.info("[ip: {}, send sms mobile: {} : {}, retCode:{}]", ip, mobile, code, retCode)
-            if(retCode == "0"){
+            logger.info("[ip: {}, channel:{}, send sms mobile: {} : {}, retCode:{}]", ip, channel, mobile, code, retCode)
+            if(success){
                 try{
                     logger.debug("insert logs")
                     smscode_los().insert($$(mobile:mobile, "used":Boolean.FALSE, "sms_code":code, ip : ip, timestamp:System.currentTimeMillis(),
