@@ -7,6 +7,7 @@ import com.ttpod.user.common.msg.MontnetSmsUtil
 import com.ttpod.user.common.util.AuthCode
 import com.ttpod.user.common.util.KeyUtils
 import com.ttpod.user.model.Code
+import com.ttpod.user.model.SmsChannel
 import com.ttpod.user.model.SmsCode
 import com.ttpod.user.web.api.Web
 import org.apache.commons.lang.StringUtils
@@ -127,7 +128,8 @@ class AuthCodeController extends BaseController {
         if(!Web.smsSendMobileWithoutReg(mobile))
             return [code : Code.短信验证码每日次数超过限制]
 
-        if(!sendMobile(req, key, mobile, content, length, (limit%2))){
+        //if(!sendMobile(req, key, mobile, content, length, (limit%2))){
+        if(!sendMobile(req, key, mobile, content, length, SmsChannel.创蓝.ordinal())){
             [code: Code.ERROR]
         }
         [code: Code.OK]
@@ -220,7 +222,7 @@ class AuthCodeController extends BaseController {
             String[] sendMobile = [mobile]
             Boolean success = Boolean.FALSE;
             String retCode;
-            if(channel == 1) {
+            if(channel == SmsChannel.创蓝.ordinal()) {
                 retCode = HttpSender.batchSend(sendMobile, content);
                 success = retCode.equals("0");
             } else {
