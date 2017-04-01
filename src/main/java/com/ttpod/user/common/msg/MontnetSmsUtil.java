@@ -22,23 +22,22 @@ public class MontnetSmsUtil {
     private static final String api_url = "http://61.145.229.26:8086/MWGate/wmgw.asmx/MongateCsSpSendSmsNew?userId=" + userId + "&password=" + password + "&pszMobis=%s&pszMsg=%s&iMobiCount=1&pszSubPort=*";
     private static final SAXBuilder saxBuilder = new SAXBuilder();
 
-    public static Boolean send(String mobile, String content) {
+    public static String send(String mobile, String content) {
         String url = String.format(api_url, mobile, content);
         try {
             String result = HttpClientUtil4_3.get(url, null);
             Document doc = saxBuilder.build(new StringReader(result));
-            String retCode = doc.getContent(0).getValue();
-            return StringUtils.length(retCode) >= 15 ;
+            return doc.getContent(0).getValue();
         } catch (IOException | JDOMException e) {
             e.printStackTrace();
         }
-        return Boolean.FALSE;
+        return "0";
     }
 
     public static void main(String[] args) throws Exception {
         String mobile = "15021031149";
 //        String msg = "主人,您有一个新的订单.NICK_NAME要您在CALL_TIME叫醒ta.打开甜心叫醒查看详情-甜心叫醒";
-        String msg = "test";
+        String msg = "tes,testt";
         System.out.println(send(mobile, msg));
     }
 }

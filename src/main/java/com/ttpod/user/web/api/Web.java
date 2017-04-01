@@ -222,7 +222,7 @@ public abstract class Web  extends WebUtils{
      * 每天手机号发送短信验证码次数
      * @return
      */
-    public static boolean smsSendMobileLimited(String mobile) {
+    public static Integer smsSendMobileLimited(String mobile) {
         String totalLimit = KeyUtils.AUTHCODE.smsLimitTotalPerMobile(mobile);
         mainRedis.opsForValue().setIfAbsent(totalLimit, TOTAL_SMSSENDPER_MOBILE);
         if (mainRedis.getExpire(totalLimit) < 0) {
@@ -233,7 +233,7 @@ public abstract class Web  extends WebUtils{
             mainRedis.expireAt(totalLimit, self.getTime());
         }
         logger.debug("smsSendMobileLimited:{}", mobile);
-        return mainRedis.opsForValue().increment(totalLimit, -1L).intValue() < 0;
+        return mainRedis.opsForValue().increment(totalLimit, -1L).intValue();
     }
 
     /**
