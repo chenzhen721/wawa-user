@@ -217,7 +217,7 @@ class ThirdloginController extends BaseController {
                 return [code: Code.ERROR]
         }
         isFriendShare(req,access_token)
-
+        bind_openId(openid,access_token)
         return [code: Code.OK, data: [token: user['token'], first_login: first_login, openid: openid]]
     }
 

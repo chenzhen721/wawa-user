@@ -100,7 +100,20 @@ public abstract class BaseController extends ControllerSupport7 {
                 }
             }
         });
+    }
 
+    public void bind_openId(final String openId,final String access_token){
+        StaticSpring.execute(new Runnable() {
+            @Override
+            public void run() {
+                String url = AppProperties.get("api.domain") + "user/bind_open_id?open_id=" + openId + "&access_token=" + access_token;
+                try {
+                    HttpClientUtil4_3.get(url, null, HttpClientUtil4_3.UTF8);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
 
