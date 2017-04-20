@@ -81,7 +81,7 @@ public abstract class BaseController extends ControllerSupport7 {
     /**
      * 判断是否是用户分享
      * @param req
-     * @param token
+     * @param access_token
      * @throws IOException
      */
     public void isFriendShare(final HttpServletRequest req,final String access_token)  {
@@ -92,7 +92,7 @@ public abstract class BaseController extends ControllerSupport7 {
                 String ip = Web.getClientIp(req);
                 String format = user_agent + "_" + ip;
                 String requestId = MD5.digest2HEX(format);
-                String url = AppProperties.get("api.domain") + "redpacket/friend_award?request_id=" + requestId + "&access_token=" + access_token;
+                String url = AppProperties.get("main.domain") + "redpacket/friend_award?request_id=" + requestId + "&access_token=" + access_token;
                 try {
                     HttpClientUtil4_3.get(url, null, HttpClientUtil4_3.UTF8);
                 } catch (IOException e) {
@@ -102,11 +102,16 @@ public abstract class BaseController extends ControllerSupport7 {
         });
     }
 
+    /**
+     * 绑定微信号
+     * @param openId
+     * @param access_token
+     */
     public void bind_openId(final String openId,final String access_token){
         StaticSpring.execute(new Runnable() {
             @Override
             public void run() {
-                String url = AppProperties.get("api.domain") + "user/bind_open_id?open_id=" + openId + "&access_token=" + access_token;
+                String url = AppProperties.get("main.domain") + "user/bind_open_id?open_id=" + openId + "&access_token=" + access_token;
                 try {
                     HttpClientUtil4_3.get(url, null, HttpClientUtil4_3.UTF8);
                 } catch (IOException e) {
