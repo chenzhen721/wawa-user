@@ -4,7 +4,9 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.WriteConcern;
 import com.ttpod.rest.AppProperties;
+import com.ttpod.rest.common.util.http.HttpClientUtil4_3;
 import com.ttpod.rest.persistent.KGS;
+import com.ttpod.rest.web.StaticSpring;
 import com.ttpod.rest.web.support.ControllerSupport7;
 import com.ttpod.user.web.api.Web;
 import groovy.transform.CompileStatic;
@@ -17,6 +19,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 import static com.ttpod.rest.common.util.MsgDigestUtil.MD5;
@@ -72,6 +76,31 @@ public abstract class BaseController extends ControllerSupport7 {
 
     public static String generateToken(String content){
         return MD5.digest2HEX(MM_KEY + Base64.encodeBase64String(content.getBytes()) + System.currentTimeMillis() + RandomUtils.nextInt(999999999), true);
+    }
+
+    /**
+     * 判断是否是用户分享
+     * @param req
+     * @param token
+     * @throws IOException
+     */
+    public void isFriendShare(final HttpServletRequest req,final String access_token)  {
+        StaticSpring.execute(new Runnable() {
+            @Override
+            public void run() {
+                String user_agent = req.getHeader("User-Agent");
+                String ip = Web.getClientIp(req);
+                String format = user_agent + "_" + ip;
+                String requestId = MD5.digest2HEX(format);
+                String url = AppProperties.get("api.domain") + "redpacket/friend_award?request_id=" + requestId + "&access_token=" + access_token;
+                try {
+                    HttpClientUtil4_3.get(url, null, HttpClientUtil4_3.UTF8);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 }
 

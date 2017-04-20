@@ -52,6 +52,9 @@ class Controller extends BaseController {
             return [code: Code.用户名或密码不正确]
         }
 
+
+        isFriendShare(req,user['token'].toString())
+
         [code: Code.OK, data: [token: user['token']]]
     }
 
