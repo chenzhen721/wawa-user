@@ -159,9 +159,6 @@ class ThirdloginController extends BaseController {
                 return [code: Code.ERROR]
         }
 
-        // 登陆判断是否有好友邀请
-        isFriendShare(req,access_token)
-
         return [code: Code.OK, data: [token: user['token'], first_login: first_login,'openid':openId]]
     }
 
@@ -216,8 +213,7 @@ class ThirdloginController extends BaseController {
             if (user == null)
                 return [code: Code.ERROR]
         }
-        isFriendShare(req,user['token'].toString())
-        bind_openId(openid,user['token'].toString().toString())
+
         return [code: Code.OK, data: [token: user['token'], first_login: first_login, openid: openid]]
     }
 

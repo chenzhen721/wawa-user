@@ -77,49 +77,6 @@ public abstract class BaseController extends ControllerSupport7 {
     public static String generateToken(String content){
         return MD5.digest2HEX(MM_KEY + Base64.encodeBase64String(content.getBytes()) + System.currentTimeMillis() + RandomUtils.nextInt(999999999), true);
     }
-
-    /**
-     * 判断是否是用户分享
-     * @param req
-     * @param access_token
-     * @throws IOException
-     */
-    public void isFriendShare(final HttpServletRequest req,final String access_token)  {
-        StaticSpring.execute(new Runnable() {
-            @Override
-            public void run() {
-                String user_agent = req.getHeader("User-Agent");
-                String ip = Web.getClientIp(req);
-                String format = user_agent + "_" + ip;
-                String requestId = MD5.digest2HEX(format);
-                String url = AppProperties.get("main.domain") + "redpacket/friend_award?request_id=" + requestId + "&access_token=" + access_token;
-                try {
-                    HttpClientUtil4_3.get(url, null, HttpClientUtil4_3.UTF8);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    /**
-     * 绑定微信号
-     * @param openId
-     * @param access_token
-     */
-    public void bind_openId(final String openId,final String access_token){
-        StaticSpring.execute(new Runnable() {
-            @Override
-            public void run() {
-                String url = AppProperties.get("main.domain") + "user/bind_open_id?open_id=" + openId + "&access_token=" + access_token;
-                try {
-                    HttpClientUtil4_3.get(url, null, HttpClientUtil4_3.UTF8);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 }
 
 
