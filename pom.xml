@@ -89,7 +89,6 @@
                 <groovy-scope>provided</groovy-scope>
                 <aspectj-scope>provided</aspectj-scope>
                 <pic.domain>http://test.aiimg.sumeme.com/</pic.domain>
-                <main.domain>http://test-aiapi.memeyule.com/</main.domain>
                 <api.domain>http://test-aiuser.memeyule.com/</api.domain>
                 <site.domain>http://www.aiwanzhibo.com/</site.domain>
                 <!-- replset-->
