@@ -4,7 +4,9 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.WriteConcern;
 import com.ttpod.rest.AppProperties;
+import com.ttpod.rest.common.util.http.HttpClientUtil4_3;
 import com.ttpod.rest.persistent.KGS;
+import com.ttpod.rest.web.StaticSpring;
 import com.ttpod.rest.web.support.ControllerSupport7;
 import com.ttpod.user.web.api.Web;
 import groovy.transform.CompileStatic;
@@ -17,6 +19,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 import static com.ttpod.rest.common.util.MsgDigestUtil.MD5;

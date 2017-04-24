@@ -1,6 +1,7 @@
 package com.ttpod.user.web
 
 import com.mongodb.DBObject
+import com.ttpod.rest.AppProperties
 import com.ttpod.rest.anno.Rest
 import com.ttpod.rest.common.util.JSONUtil
 import com.ttpod.rest.common.util.http.HttpClientUtil4_3
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 import static com.ttpod.rest.common.doc.MongoKey._id
+import static com.ttpod.rest.common.util.MsgDigestUtil.MD5
 import static com.ttpod.rest.common.util.WebUtils.$$
 
 /**
@@ -131,6 +133,8 @@ class ThirdloginController extends BaseController {
         }
 
         //获取用户信息
+        logger.debug('unionid is {}',unionid)
+
         def user = users().findOne($$('qq_unionid': unionid), USER_FIELD)
 
         //首次登录同步用户信息https://graph.qq.com/user/get_user_info?
@@ -156,9 +160,11 @@ class ThirdloginController extends BaseController {
             if (user == null)
                 return [code: Code.ERROR]
         }
-
-        return [code: Code.OK, data: [token: user['token'], first_login: first_login]]
+        logger.debug('first_login is {}',first_login)
+        return [code: Code.OK, data: [token: user['token'], first_login: first_login,'openid':openId]]
     }
+
+
 
     /**
      * 微信登陆接口
