@@ -21,7 +21,7 @@ public class HttpSender {
 
     private static final String API_URL = "http://222.73.117.169/msg/HttpBatchSendSM" + "?account=" + ACCOUNT + "&pswd=" + PSWD;
 
-    private static final String MSG_SIGN = "【爱玩直播】";
+    private static final String MSG_SIGN = "【来吼】";
 
     // needstatus 是否需要短信状态报告
     private static final boolean NEED_STATUS = false;
