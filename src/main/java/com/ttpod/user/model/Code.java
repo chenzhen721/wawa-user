@@ -10,6 +10,7 @@ public interface Code {
 
     Integer OK = 1;
     Integer ERROR = 0;
+
     Integer 余额不足 = 30412;
     Integer 权限不足 = 30413;
     Integer 验证码验证失败 = 30419;
@@ -21,11 +22,16 @@ public interface Code {
     Integer 手机号格式错误 = 30432;
     Integer 短信验证码无效 = 30431;
     Integer 手机号码已存在 = 30433;
-    Integer 邮箱已存在 = 30434;
     Integer 短信验证间隔太短 = 30435;
     Integer 手机号码不存在 = 30436;
     Integer 短信验证码每日次数超过限制 = 30437;
     Integer 无效的修改密码链接 = 30438;
     Integer 邮箱已经存在 = 30414;
     Integer 邮箱格式错误 = 30415;
+
+    //家族
+
+    //好友
+
+
 }
