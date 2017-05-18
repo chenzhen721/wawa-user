@@ -185,7 +185,7 @@ class ThirdloginController extends BaseController {
         }
 
         if (StringUtils.isBlank(access_token) || StringUtils.isBlank(openid)) {
-            return [code: Code.ERROR]
+            return [code: Code.参数无效]
         }
 
         def userInfo_url = WEIXIN_URL + "userinfo?access_token=${access_token}&openid=${openid}"
