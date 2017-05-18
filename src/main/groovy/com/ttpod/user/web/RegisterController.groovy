@@ -72,6 +72,40 @@ class RegisterController extends BaseController {
     }
 
     /**
+     * 手机号码注册+登录
+     * @param req
+     * @return
+     */
+    def mobile_login(HttpServletRequest req) {
+        logger.debug('Received mobile params is {}', req.getParameterMap())
+        def mobile = req['mobile']
+        def sms_code = req['sms_code']
+
+        if (StringUtils.isBlank(mobile) || StringUtils.isBlank(sms_code)) {
+            return Web.missParam()
+        }
+        if (!VALID_MOBILE.matcher(mobile).matches()) {
+            logger.debug('手机号格式错误')
+            return [code: Code.手机号格式错误]
+        }
+
+        if (Web.smsCodeVeri(SmsCode.注册, req)) {
+            logger.debug('短信验证码无效')
+            return [code: Code.短信验证码无效]
+        }
+        //是否首次登录
+        Boolean first_login = Boolean.FALSE
+        def user = users().findOne($$('mobile': mobile), USER_FIELD)
+        if(user == null){
+            first_login = Boolean.TRUE
+            user = buildUser(req, null, mobile, null, null, null,null)
+        }
+        if(user == null)
+            return [code: Code.ERROR]
+        [code: Code.OK, data: [token: user['token'], first_login: first_login]]
+    }
+
+    /**
      * 机器人注册
      * @param req
      * @return
