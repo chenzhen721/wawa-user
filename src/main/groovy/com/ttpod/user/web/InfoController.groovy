@@ -63,17 +63,12 @@ class InfoController extends BaseController {
         def mobile = req['mobile']
         def sms_code = req['sms_code']
         def pwd = req['pwd']
-        def type = req['type']
 
-        if(StringUtils.isBlank(mobile) || StringUtils.isBlank(sms_code) || StringUtils.isBlank(token) || StringUtils.isBlank(type)){
+        if(StringUtils.isBlank(mobile) || StringUtils.isBlank(sms_code) || StringUtils.isBlank(token)){
             return [code: Code.参数无效]
         }
 
-        if(Integer.valueOf(type) != SmsCode.绑定手机号.ordinal()){
-            return [code: Code.参数无效]
-        }
-
-        if(Web.smsCodeVeri(SmsCode.绑定手机号, req)){
+        if(Web.smsCodeVeri(SmsCode.绑定手机号, sms_code, mobile)){
             return [code : Code.短信验证码无效]
         }
         if(users().count($$(mobile: mobile)) > 0){
