@@ -68,6 +68,10 @@ class InfoController extends BaseController {
             return [code: Code.参数无效]
         }
 
+        if(!VALID_MOBILE.matcher(mobile).matches()){
+            return [code: Code.手机号格式错误]
+        }
+
         if(Web.smsCodeVeri(SmsCode.绑定手机号, sms_code, mobile)){
             return [code : Code.短信验证码无效]
         }
