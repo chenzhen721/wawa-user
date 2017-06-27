@@ -33,7 +33,7 @@ class ThirdloginController extends BaseController {
 
     // 微信app属性
     private final static String WEIXIN_APP_ID = "wx85c1789a23ef15f9"
-    private final static String WEIXIN_APP_SECRET = "dd7843b4f5514f88e0c48f668edd1569"
+    private final static String WEIXIN_APP_SECRET = "4b9628580a15224181505883d588ed30"
     private final static String WEIXIN_URL = "https://api.weixin.qq.com/sns/"
 
     // 微信h5属性
