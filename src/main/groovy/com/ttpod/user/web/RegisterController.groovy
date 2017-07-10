@@ -89,11 +89,7 @@ class RegisterController extends BaseController {
             return [code: Code.手机号格式错误]
         }
 
-<<<<<<< HEAD
-        if (Web.smsCodeVeri(SmsCode.注册, req)) {
-=======
         if (Web.smsCodeVeri(SmsCode.登录, req)) {
->>>>>>> dev
             logger.debug('短信验证码无效')
             return [code: Code.短信验证码无效]
         }
