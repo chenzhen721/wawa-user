@@ -92,7 +92,7 @@ class AuthCodeController extends BaseController {
         def length = ServletRequestUtils.getIntParameter(req,'length',0)
         def mobile = req['mobile']
         //
-        Integer type = ServletRequestUtils.getIntParameter(req, "type", SmsCode.注册.ordinal())
+        Integer type = ServletRequestUtils.getIntParameter(req, "type", SmsCode.登录.ordinal())
         if(StringUtils.isEmpty(mobile)){
             [code : Code.参数无效]
         }

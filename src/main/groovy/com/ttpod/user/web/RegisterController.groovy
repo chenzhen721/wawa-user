@@ -89,7 +89,11 @@ class RegisterController extends BaseController {
             return [code: Code.手机号格式错误]
         }
 
+<<<<<<< HEAD
         if (Web.smsCodeVeri(SmsCode.注册, req)) {
+=======
+        if (Web.smsCodeVeri(SmsCode.登录, req)) {
+>>>>>>> dev
             logger.debug('短信验证码无效')
             return [code: Code.短信验证码无效]
         }
@@ -155,11 +159,13 @@ class RegisterController extends BaseController {
         if(StringUtils.isNotEmpty(cid))
             info.put('cid',cid)
 
-        String password = MD5.digest2HEX(pwd + user_id)
+        if(StringUtils.isNotEmpty(pwd)){
+            String password = MD5.digest2HEX(pwd + user_id)
+            info.put('pwd',password)
+        }
         long time = System.currentTimeMillis()
         info.put('regTime',time)
-        info.put('pwd',password)
-        String token = generateToken(password + user_id)
+        String token = generateToken(user_id as String)
         info.put('token',token)
         if(StringUtils.isEmpty(info['pic'] as String))
             info.put("pic", User.DEFAULT_PIC)

@@ -32,8 +32,8 @@ class ThirdloginController extends BaseController {
     static Logger logger = LoggerFactory.getLogger(ThirdloginController.class)
 
     // 微信app属性
-    private final static String WEIXIN_APP_ID = "wx9778e46ed6e27241"
-    private final static String WEIXIN_APP_SECRET = "0d8177ebff9f76bb7800067922e92255"
+    private final static String WEIXIN_APP_ID = "wx85c1789a23ef15f9"
+    private final static String WEIXIN_APP_SECRET = "4b9628580a15224181505883d588ed30"
     private final static String WEIXIN_URL = "https://api.weixin.qq.com/sns/"
 
     // 微信h5属性
@@ -41,13 +41,13 @@ class ThirdloginController extends BaseController {
     private static final String WEIXIN_H5_APP_SECRET = Web.isTest ? "6d8d88703396a68d6dff50caef7c0491" : "1c8909b64f7b3eb939da2b4e90dae4e3"
 
     // qq app id
-    private final static String QQ_APP_ID = '1105945342'
+    private final static String QQ_APP_ID = '1106155396'
 
     // qq app key
-    private final static String QQ_APP_KEY = 'tDBHaAJu4jOYDPFX'
+    private final static String QQ_APP_KEY = 'eWQV6GKzP9RIfnEX'
 
     // qq id和key
-    private final static Map<String,String> QQ_APP_ID_KEYS = ['1105945342': 'tDBHaAJu4jOYDPFX']
+    private final static Map<String,String> QQ_APP_ID_KEYS = ['1106155396': 'eWQV6GKzP9RIfnEX']
 
     private final static String TOKEN_FIELD = '{access_token}'
 
@@ -185,7 +185,7 @@ class ThirdloginController extends BaseController {
         }
 
         if (StringUtils.isBlank(access_token) || StringUtils.isBlank(openid)) {
-            return [code: Code.ERROR]
+            return [code: Code.参数无效]
         }
 
         def userInfo_url = WEIXIN_URL + "userinfo?access_token=${access_token}&openid=${openid}"

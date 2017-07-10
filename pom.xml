@@ -58,8 +58,8 @@
             <properties>
                 <redis.port>6379</redis.port>
                 <redis.host>192.168.31.246</redis.host>
-                <mongo.uri>192.168.31.246:27000</mongo.uri>
-                <mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>
+                <mongo.uri>192.168.31.231:20000,192.168.31.236:20000,192.168.31.231:20001</mongo.uri>
+                <mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write>
                 <api.domain>http://test-aiuser.memeyule.com/</api.domain>
             </properties>
 
