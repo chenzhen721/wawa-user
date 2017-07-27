@@ -32,6 +32,7 @@ class ThirdloginController extends BaseController {
     static Logger logger = LoggerFactory.getLogger(ThirdloginController.class)
 
     // 微信app属性
+    //private final static String WEIXIN_APP_ID = "wx45d43a50adf5a470"
     private final static String WEIXIN_APP_ID = "wx85c1789a23ef15f9"
     private final static String WEIXIN_APP_SECRET = "4b9628580a15224181505883d588ed30"
     private final static String WEIXIN_URL = "https://api.weixin.qq.com/sns/"
