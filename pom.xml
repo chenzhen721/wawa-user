@@ -38,13 +38,13 @@
         <site.domain>http://www.aiwanzhibo.com/</site.domain>
         <pic.folder>c:/upload/</pic.folder>
 
-        <buss.thread.minSize>300</buss.thread.minSize>
-        <buss.thread.maxSize>400</buss.thread.maxSize>
+        <buss.thread.minSize>100</buss.thread.minSize>
+        <buss.thread.maxSize>200</buss.thread.maxSize>
         <redis.host>192.168.1.100</redis.host>
         <redis.port>6385</redis.port>
         <redis.timeout>15000</redis.timeout>
-        <redis.pool.maxActive>500</redis.pool.maxActive>
-        <redis.pool.maxIdle>500</redis.pool.maxIdle>
+        <redis.pool.maxActive>100</redis.pool.maxActive>
+        <redis.pool.maxIdle>100</redis.pool.maxIdle>
         <redis.pool.maxWait>-1</redis.pool.maxWait>
         <redis.pool.testOnBorrow>true</redis.pool.testOnBorrow>
         <redis.pool.testOnReturn>true</redis.pool.testOnReturn>
@@ -102,8 +102,8 @@
             <properties>
                 <redis.host>192.168.2.15</redis.host>
                 <redis.port>6382</redis.port>
-                <redis.pool.maxActive>500</redis.pool.maxActive>
-                <redis.pool.maxIdle>500</redis.pool.maxIdle>
+                <redis.pool.maxActive>200</redis.pool.maxActive>
+                <redis.pool.maxIdle>200</redis.pool.maxIdle>
                 <redis.pool.maxWait>-1</redis.pool.maxWait>
                 <redis.pool.testOnBorrow>true</redis.pool.testOnBorrow>
                 <redis.pool.testOnReturn>true</redis.pool.testOnReturn>
