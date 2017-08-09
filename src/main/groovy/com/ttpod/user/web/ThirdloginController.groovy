@@ -185,10 +185,6 @@ class ThirdloginController extends BaseController {
             return [code: Code.参数无效]
         }
 
-        if (StringUtils.isBlank(access_token) || StringUtils.isBlank(openid)) {
-            return [code: Code.参数无效]
-        }
-
         def userInfo_url = WEIXIN_URL + "userinfo?access_token=${access_token}&openid=${openid}"
         String userInfoResp = HttpClientUtil4_3.get(userInfo_url, null, HttpClientUtil4_3.UTF8)
         Map<String, Object> userInfoMaps = JSONUtil.jsonToMap(userInfoResp)
