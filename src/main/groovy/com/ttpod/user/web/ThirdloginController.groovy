@@ -185,6 +185,20 @@ class ThirdloginController extends BaseController {
             return [code: Code.参数无效]
         }
 
+        if(StringUtils.isNotBlank(code) && StringUtils.isEmpty(access_token)){
+            token_url =  token_url+"&code=${code}"
+            logger.debug("weixin login token_url: {}",token_url)
+            String resp = HttpClientUtil4_3.get(token_url, null, HttpClientUtil4_3.UTF8)
+            Map respMap = JSONUtil.jsonToMap(resp)
+            logger.debug("weixin login token_url respMap: {}", respMap)
+            access_token = respMap['access_token'] as String
+            openid = respMap['openid'] as String
+        }
+
+        if(StringUtils.isEmpty(access_token) && StringUtils.isEmpty(openid)){
+            return [code: Code.参数无效]
+        }
+
         def userInfo_url = WEIXIN_URL + "userinfo?access_token=${access_token}&openid=${openid}"
         String userInfoResp = HttpClientUtil4_3.get(userInfo_url, null, HttpClientUtil4_3.UTF8)
         Map<String, Object> userInfoMaps = JSONUtil.jsonToMap(userInfoResp)
