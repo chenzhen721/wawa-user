@@ -11,10 +11,7 @@
     <context:property-placeholder location="classpath:application.properties" ignore-unresolvable="true"/>
 
     <context:component-scan base-package="com.ttpod.user.web"/>
-
-    <mvc:resources mapping="/" location="/index.html" order="0"/>
-    <mvc:resources mapping="/favicon.ico" location="/favicon.ico" order="0"/>
-    <mvc:resources mapping="/robots.txt" location="/robots.txt" order="0"/>
+    <mvc:resources  location="/static/" mapping="/static/MP_*.txt"/>
     <mvc:annotation-driven/>
     <!--<cache:annotation-driven cache-manager="cacheManager" />-->
 
