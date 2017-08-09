@@ -11,8 +11,8 @@
     <context:property-placeholder location="classpath:application.properties" ignore-unresolvable="true"/>
 
     <context:component-scan base-package="com.ttpod.user.web"/>
-    <mvc:resources  location="/static/" mapping="/static/MP_*.txt"/>
     <mvc:annotation-driven/>
+    <mvc:resources  location="/static/" mapping="/static/MP_*.txt"/>
     <!--<cache:annotation-driven cache-manager="cacheManager" />-->
 
 
