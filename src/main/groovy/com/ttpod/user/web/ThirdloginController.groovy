@@ -96,7 +96,7 @@ class ThirdloginController extends BaseController {
      */
     private qq_login(HttpServletRequest req, HttpServletResponse response, String app_id, String app_key) {
         logger.debug('Receive qq_login params req is {},app_id is {},app_key is {}', req.getParameterMap(), app_id, app_key)
-
+        def back_url = req["url"]
         def code = req["code"]
         def access_token = req["access_token"]
 
@@ -161,7 +161,12 @@ class ThirdloginController extends BaseController {
             if (user == null)
                 return [code: Code.ERROR]
         }
-        logger.debug('first_login is {}',first_login)
+        //PC端转跳
+        if(StringUtils.isNotEmpty(back_url)) {
+            back_url = getRedirectByBackUrl(back_url, user['token'] as String)
+            response.sendRedirect(back_url)
+            return
+        }
         return [code: Code.OK, data: [token: user['token'], first_login: first_login,'openid':openId]]
     }
 
