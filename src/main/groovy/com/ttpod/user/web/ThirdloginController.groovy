@@ -38,8 +38,8 @@ class ThirdloginController extends BaseController {
     private final static String WEIXIN_URL = "https://api.weixin.qq.com/sns/"
 
     // 微信h5属性
-    private static final String WEIXIN_H5_APP_ID = Web.isTest ? "wx85c1789a23ef15f9" : "wx85c1789a23ef15f9"
-    private static final String WEIXIN_H5_APP_SECRET = Web.isTest ? "4b9628580a15224181505883d588ed30" : "1c8909b64f7b3eb939da2b4e90dae4e3"
+    private static final String WEIXIN_H5_APP_ID = Web.isTest ? "wx27a01ce6c6c3e0e8" : "wx85c1789a23ef15f9"
+    private static final String WEIXIN_H5_APP_SECRET = Web.isTest ? "6d8d88703396a68d6dff50caef7c0491" :  "4b9628580a15224181505883d588ed30"
 
     // qq app id
     private final static String QQ_APP_ID = '1106155396'
@@ -96,7 +96,7 @@ class ThirdloginController extends BaseController {
      */
     private qq_login(HttpServletRequest req, HttpServletResponse response, String app_id, String app_key) {
         logger.debug('Receive qq_login params req is {},app_id is {},app_key is {}', req.getParameterMap(), app_id, app_key)
-
+        def back_url = req["url"]
         def code = req["code"]
         def access_token = req["access_token"]
 
@@ -161,7 +161,12 @@ class ThirdloginController extends BaseController {
             if (user == null)
                 return [code: Code.ERROR]
         }
-        logger.debug('first_login is {}',first_login)
+        //PC端转跳
+        if(StringUtils.isNotEmpty(back_url)) {
+            back_url = getRedirectByBackUrl(back_url, user['token'] as String)
+            response.sendRedirect(back_url)
+            return
+        }
         return [code: Code.OK, data: [token: user['token'], first_login: first_login,'openid':openId]]
     }
 
@@ -178,6 +183,7 @@ class ThirdloginController extends BaseController {
         logger.debug('Received weixin_login params req is {}.token_url is {}', req.getParameterMap(), token_url)
         def openid = req['openid']
         def code = req['code']
+        def back_url = req["url"]
         def access_token = req['access_token']
         def first_login = Boolean.FALSE
 
@@ -185,7 +191,17 @@ class ThirdloginController extends BaseController {
             return [code: Code.参数无效]
         }
 
-        if (StringUtils.isBlank(access_token) || StringUtils.isBlank(openid)) {
+        if(StringUtils.isNotBlank(code) && StringUtils.isEmpty(access_token)){
+            token_url =  token_url+"&code=${code}"
+            logger.debug("weixin login token_url: {}",token_url)
+            String resp = HttpClientUtil4_3.get(token_url, null, HttpClientUtil4_3.UTF8)
+            Map respMap = JSONUtil.jsonToMap(resp)
+            logger.debug("weixin login token_url respMap: {}", respMap)
+            access_token = respMap['access_token'] as String
+            openid = respMap['openid'] as String
+        }
+
+        if(StringUtils.isEmpty(access_token) && StringUtils.isEmpty(openid)){
             return [code: Code.参数无效]
         }
 
@@ -216,7 +232,12 @@ class ThirdloginController extends BaseController {
             if (user == null)
                 return [code: Code.ERROR]
         }
-
+        //PC端转跳
+        if(StringUtils.isNotEmpty(back_url)) {
+            back_url = getRedirectByBackUrl(back_url, user['token'] as String)
+            response.sendRedirect(back_url)
+            return
+        }
         return [code: Code.OK, data: [token: user['token'], first_login: first_login, openid: openid]]
     }
 
