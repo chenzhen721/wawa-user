@@ -178,6 +178,7 @@ class ThirdloginController extends BaseController {
         logger.debug('Received weixin_login params req is {}.token_url is {}', req.getParameterMap(), token_url)
         def openid = req['openid']
         def code = req['code']
+        def back_url = req["url"]
         def access_token = req['access_token']
         def first_login = Boolean.FALSE
 
@@ -226,7 +227,12 @@ class ThirdloginController extends BaseController {
             if (user == null)
                 return [code: Code.ERROR]
         }
-
+        //PC端转跳
+        if(StringUtils.isNotEmpty(back_url)) {
+            back_url = getRedirectByBackUrl(back_url, user['token'] as String)
+            response.sendRedirect(back_url)
+            return
+        }
         return [code: Code.OK, data: [token: user['token'], first_login: first_login, openid: openid]]
     }
 
