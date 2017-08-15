@@ -43,6 +43,7 @@ class ThirdloginController extends BaseController {
 
     // qq app id
     private final static String QQ_APP_ID = '1106155396'
+    private final static String QQ_APP_PC_ID = '101421372'
 
     // qq app key
     private final static String QQ_APP_KEY = 'eWQV6GKzP9RIfnEX'
@@ -69,7 +70,7 @@ class ThirdloginController extends BaseController {
 
     def qq_pc(HttpServletRequest req, HttpServletResponse response) {
         logger.debug('Received qq params is {}',req.getParameterMap())
-        String appId = ServletRequestUtils.getStringParameter(req, "app_id", "101421372")
+        String appId = ServletRequestUtils.getStringParameter(req, "app_id", QQ_APP_PC_ID)
         String key = QQ_APP_ID_KEYS[appId]
         return qq_login(req, response, appId, key)
     }
