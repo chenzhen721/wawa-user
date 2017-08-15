@@ -43,12 +43,13 @@ class ThirdloginController extends BaseController {
 
     // qq app id
     private final static String QQ_APP_ID = '1106155396'
+    private final static String QQ_APP_PC_ID = '101421372'
 
     // qq app key
     private final static String QQ_APP_KEY = 'eWQV6GKzP9RIfnEX'
 
     // qq id和key
-    private final static Map<String,String> QQ_APP_ID_KEYS = ['1106155396': 'eWQV6GKzP9RIfnEX']
+    private final static Map<String,String> QQ_APP_ID_KEYS = ['1106155396': 'eWQV6GKzP9RIfnEX', '101421372':'6a1107ce3882e5bdb44176aead76e032']
 
     private final static String TOKEN_FIELD = '{access_token}'
 
@@ -63,6 +64,13 @@ class ThirdloginController extends BaseController {
     def qq(HttpServletRequest req, HttpServletResponse response) {
         logger.debug('Received qq params is {}',req.getParameterMap())
         String appId = ServletRequestUtils.getStringParameter(req, "app_id", QQ_APP_ID)
+        String key = QQ_APP_ID_KEYS[appId]
+        return qq_login(req, response, appId, key)
+    }
+
+    def qq_pc(HttpServletRequest req, HttpServletResponse response) {
+        logger.debug('Received qq params is {}',req.getParameterMap())
+        String appId = ServletRequestUtils.getStringParameter(req, "app_id", QQ_APP_PC_ID)
         String key = QQ_APP_ID_KEYS[appId]
         return qq_login(req, response, appId, key)
     }
@@ -108,7 +116,7 @@ class ThirdloginController extends BaseController {
         Boolean first_login = Boolean.FALSE
 
         if (StringUtils.isBlank(access_token)) {
-            def redirect_uri = URLEncoder.encode(SHOW_URL, "utf-8")
+            def redirect_uri = URLEncoder.encode(API_DOMAIN, "utf-8")
             //通过code 获取用户token
             def token_url = "${QQ_URL}token?grant_type=authorization_code&client_id=${app_id}&redirect_uri=${redirect_uri}&client_secret=${app_key}&code=${code}"
             logger.debug("qq login token_url: {}", token_url)
