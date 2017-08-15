@@ -115,7 +115,7 @@ class ThirdloginController extends BaseController {
         Boolean first_login = Boolean.FALSE
 
         if (StringUtils.isBlank(access_token)) {
-            def redirect_uri = URLEncoder.encode(SHOW_URL, "utf-8")
+            def redirect_uri = URLEncoder.encode(API_DOMAIN, "utf-8")
             //通过code 获取用户token
             def token_url = "${QQ_URL}token?grant_type=authorization_code&client_id=${app_id}&redirect_uri=${redirect_uri}&client_secret=${app_key}&code=${code}"
             logger.debug("qq login token_url: {}", token_url)

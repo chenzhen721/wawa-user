@@ -35,7 +35,7 @@
         <log.web.level>DEBUG</log.web.level>
         <pic.domain>https://aiimg.sumeme.com/</pic.domain>
         <api.domain>http://aiuser.memeyule.com/</api.domain>
-        <site.domain>http://www.17laihou.com/</site.domain>
+        <site.domain>http://aiuser.memeyule.com/</site.domain>
         <pic.folder>c:/upload/</pic.folder>
 
         <buss.thread.minSize>100</buss.thread.minSize>
