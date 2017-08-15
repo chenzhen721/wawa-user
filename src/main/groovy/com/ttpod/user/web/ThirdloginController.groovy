@@ -48,7 +48,7 @@ class ThirdloginController extends BaseController {
     private final static String QQ_APP_KEY = 'eWQV6GKzP9RIfnEX'
 
     // qq id和key
-    private final static Map<String,String> QQ_APP_ID_KEYS = ['1106155396': 'eWQV6GKzP9RIfnEX']
+    private final static Map<String,String> QQ_APP_ID_KEYS = ['1106155396': 'eWQV6GKzP9RIfnEX', '101421372':'6a1107ce3882e5bdb44176aead76e032']
 
     private final static String TOKEN_FIELD = '{access_token}'
 
