@@ -67,6 +67,13 @@ class ThirdloginController extends BaseController {
         return qq_login(req, response, appId, key)
     }
 
+    def qq_pc(HttpServletRequest req, HttpServletResponse response) {
+        logger.debug('Received qq params is {}',req.getParameterMap())
+        String appId = ServletRequestUtils.getStringParameter(req, "app_id", "101421372")
+        String key = QQ_APP_ID_KEYS[appId]
+        return qq_login(req, response, appId, key)
+    }
+
     /**
      * 微信手机登录
      * @param req
