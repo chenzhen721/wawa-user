@@ -95,6 +95,23 @@ class ThirdloginController extends BaseController {
     }
 
     /**
+     * 微信auth_code
+     */
+    def weixin_auth_code(HttpServletRequest req, HttpServletResponse response) {
+        def back_url = req["url"]
+        def code = req['code']
+        if (StringUtils.isBlank(code) && StringUtils.isBlank(back_url)) {
+            return [code: Code.参数无效]
+        }
+        if(StringUtils.isNotEmpty(back_url)) {
+            back_url = back_url + "&code=${code}"
+            response.sendRedirect(back_url)
+            return
+        }
+        return [code: Code.OK, data: [code: code]]
+    }
+
+    /**
      * qq登陆接口
      * @param req
      * @param response
