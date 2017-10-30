@@ -97,19 +97,19 @@ class ThirdloginController extends BaseController {
     /**
      * 微信auth_code
      */
-    def weixin_auth_code(HttpServletRequest req, HttpServletResponse response) {
-        logger.debug('Received weixin_auth_code params req is {}.url is {}', req.getParameterMap())
+    def weixin_code_redirect(HttpServletRequest req, HttpServletResponse response){
+        def code = req["code"]
         def back_url = req["url"]
-        def code = req['code']
-        if (StringUtils.isBlank(code) && StringUtils.isBlank(back_url)) {
-            return [code: Code.参数无效]
-        }
-        if(StringUtils.isNotEmpty(back_url)) {
-            back_url = back_url + "&code=${code}"
+        if(StringUtils.isNotEmpty(code) && StringUtils.isNotEmpty(back_url)) {
+            //response.sendRedirect(back_url + "?access_token=${user['token']}")
+            back_url = back_url+(back_url.contains("?") ? "&" : "?")
+            back_url = URLDecoder.decode(back_url, "UTF-8");
+            back_url = back_url.replace('{code}', code)
+            logger.debug("weixin_code_redirect back_url: {}", back_url)
             response.sendRedirect(back_url)
             return
         }
-        return [code: Code.OK, data: [code: code]]
+        [code : 0]
     }
 
     /**
