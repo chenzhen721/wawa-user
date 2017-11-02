@@ -39,7 +39,7 @@ class ThirdloginController extends BaseController {
 
     // 微信h5属性
     private static final String WEIXIN_H5_APP_ID = Web.isTest ? "wx27a01ce6c6c3e0e8" : "wx45d43a50adf5a470"
-    private static final String WEIXIN_H5_APP_SECRET = Web.isTest ? "6d8d88703396a68d6dff50caef7c0491" :  "6266858a74832a19e3db560cecbc7cf5"
+    private static final String WEIXIN_H5_APP_SECRET = Web.isTest ? "6d8d88703396a68d6dff50caef7c0491" :  "40e8dc2daac9f04bfbac32a64eb6dfff"
 
     // qq app id
     private final static String QQ_APP_ID = '1106155396'
@@ -92,6 +92,25 @@ class ThirdloginController extends BaseController {
     def weixin_h5(HttpServletRequest req, HttpServletResponse response) {
         def token_url = "${WEIXIN_URL}oauth2/access_token?grant_type=authorization_code&appid=${WEIXIN_H5_APP_ID}&secret=${WEIXIN_H5_APP_SECRET}"
         return weixin_login(req, response, token_url)
+    }
+
+    /**
+     * 微信auth_code
+     */
+    def weixin_code_redirect(HttpServletRequest req, HttpServletResponse response){
+        logger.debug('Received weixin_login params req is {}.', req.getParameterMap())
+        def code = req["code"]
+        def back_url = req["url"]
+        if(StringUtils.isNotEmpty(code) && StringUtils.isNotEmpty(back_url)) {
+            //response.sendRedirect(back_url + "?access_token=${user['token']}")
+            back_url = back_url+(back_url.contains("?") ? "&" : "?")
+            back_url = URLDecoder.decode(back_url, "UTF-8");
+            back_url = back_url.replace('{code}', code)
+            logger.debug("weixin_code_redirect back_url: {}", back_url)
+            response.sendRedirect(back_url)
+            return
+        }
+        [code : 0]
     }
 
     /**
