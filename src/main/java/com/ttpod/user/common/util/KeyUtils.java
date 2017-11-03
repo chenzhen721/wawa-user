@@ -45,6 +45,10 @@ public  abstract class KeyUtils {
             return USER + uid + SPLIT_CHAR+ User.access_token ;
         }
 
+        public static String code(Object uid) {
+            return USER + uid + SPLIT_CHAR + "code";
+        }
+
 
         public static String blackClient(String uid) {
             return "uidblack:"+uid;
