@@ -6,6 +6,7 @@ import com.ttpod.rest.anno.Rest
 import com.ttpod.rest.common.util.JSONUtil
 import com.ttpod.rest.common.util.http.HttpClientUtil4_3
 import com.ttpod.user.common.util.HttpClientUtil
+import com.ttpod.user.common.util.KeyUtils
 import com.ttpod.user.model.Code
 import com.ttpod.user.model.User
 import com.ttpod.user.web.api.Web
@@ -17,6 +18,7 @@ import org.springframework.web.bind.ServletRequestUtils
 import javax.annotation.Resource
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+import java.util.concurrent.TimeUnit
 
 import static com.ttpod.rest.common.doc.MongoKey._id
 import static com.ttpod.rest.common.util.MsgDigestUtil.MD5
@@ -111,6 +113,42 @@ class ThirdloginController extends BaseController {
             return
         }
         [code : 0]
+    }
+
+    /**
+     * 缓存微信code
+     * @param req
+     * @param response
+     * @return
+     */
+    def weixin_code_cache(HttpServletRequest req){
+        logger.debug('Received weixin_code_cache params req is {}.', req.getParameterMap())
+        def code = req["code"]
+        def _id = req['_id']
+        if (users().count($$(mm_no: '' + _id)) <= 0) {
+            return [code: 0]
+        }
+        if(StringUtils.isNotEmpty(code)) {
+            mainRedis.opsForValue().set(KeyUtils.USER.code(_id), code, 60L, TimeUnit.SECONDS)
+            return [code: 1, data: code]
+        }
+        [code : 0]
+    }
+
+    /**
+     * 获取缓存用户
+     */
+    def get_weixin_code(HttpServletRequest req) {
+        logger.debug('Received weixin_code params req is {}.', req.getParameterMap())
+        def _id = req['_id']
+        if (users().count($$(mm_no: '' + _id)) <= 0) {
+            return [code: 0]
+        }
+        def code = mainRedis.opsForValue().get(KeyUtils.USER.code(_id))
+        if (StringUtils.isNotBlank(code)) {
+            return [code: 1, data: [code: code]]
+        }
+        return [code: 0]
     }
 
     /**
