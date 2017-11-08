@@ -84,7 +84,7 @@ class ThirdloginController extends BaseController {
     def weixin(HttpServletRequest req, HttpServletResponse response) {
         logger.debug('Received weixin params is {}', req.getParameterMap())
         def token_url = "${WEIXIN_URL}oauth2/access_token?grant_type=authorization_code&appid=${WEIXIN_APP_ID}&secret=${WEIXIN_APP_SECRET}"
-        return weixin_login(req, response, token_url)
+        return weixin_login(req, response, token_url, WEIXIN_APP_ID)
     }
 
     /**
@@ -93,7 +93,7 @@ class ThirdloginController extends BaseController {
      */
     def weixin_h5(HttpServletRequest req, HttpServletResponse response) {
         def token_url = "${WEIXIN_URL}oauth2/access_token?grant_type=authorization_code&appid=${WEIXIN_H5_APP_ID}&secret=${WEIXIN_H5_APP_SECRET}"
-        return weixin_login(req, response, token_url)
+        return weixin_login(req, response, token_url, WEIXIN_H5_APP_ID)
     }
 
     /**
@@ -116,7 +116,8 @@ class ThirdloginController extends BaseController {
     }
 
     /**
-     * 缓存微信code
+     * //todo 这个接口做成直接获取对应公众号的openId
+     * // 需要前端在微信内通过微信redirect方式请求至此接口
      * @param req
      * @param response
      * @return
@@ -136,19 +137,18 @@ class ThirdloginController extends BaseController {
     }
 
     /**
-     * 获取缓存用户
+     * 获取用户openid
      */
-    def get_weixin_code(HttpServletRequest req) {
+    def get_weixin_id(HttpServletRequest req) {
         logger.debug('Received weixin_code params req is {}.', req.getParameterMap())
         def _id = req['_id']
-        if (users().count($$(mm_no: '' + _id)) <= 0) {
+        def app_id = req['app_id']
+        def key = 'weixin.' + app_id
+        def user = users().findOne($$(mm_no: '' + _id).append(key, [$exists: true]))
+        if (user == null) {
             return [code: 0]
         }
-        def code = mainRedis.opsForValue().get(KeyUtils.USER.code(_id))
-        if (StringUtils.isNotBlank(code)) {
-            return [code: 1, data: [code: code]]
-        }
-        return [code: 0]
+        return [code: 1, data: [openid: user['weixin'][app_id]]]
     }
 
     /**
@@ -244,7 +244,7 @@ class ThirdloginController extends BaseController {
      * @param token_url
      * @return
      */
-    private weixin_login(HttpServletRequest req, HttpServletResponse response, String token_url) {
+    private weixin_login(HttpServletRequest req, HttpServletResponse response, String token_url, String app_id) {
         logger.debug('Received weixin_login params req is {}.token_url is {}', req.getParameterMap(), token_url)
         def openid = req['openid']
         def code = req['code']
@@ -293,9 +293,16 @@ class ThirdloginController extends BaseController {
             userInfos.put("pic", userInfoMaps['headimgurl'] ?: "")
             userInfos.put("nickname", userInfoMaps['nickname'])
             userInfos.put("via", "weixin")
+            def map = new HashMap()
+            map.put(app_id, openid)
+            userInfos.put("weixin", map)
             user = buildThirdUser(userInfos, openid, req)
             if (user == null)
                 return [code: Code.ERROR]
+        } else {
+            if (user['weixin'] == null || user['weixin'][app_id] == null) {
+                users().update($$(_id: user['_id']), $$($set: $$('weixin.' + app_id, openid)), false, false, writeConcern)
+            }
         }
         //PC端转跳
         if(StringUtils.isNotEmpty(back_url)) {
