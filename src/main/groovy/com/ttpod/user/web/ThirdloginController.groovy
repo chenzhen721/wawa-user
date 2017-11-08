@@ -84,7 +84,7 @@ class ThirdloginController extends BaseController {
     def weixin(HttpServletRequest req, HttpServletResponse response) {
         logger.debug('Received weixin params is {}', req.getParameterMap())
         def token_url = "${WEIXIN_URL}oauth2/access_token?grant_type=authorization_code&appid=${WEIXIN_APP_ID}&secret=${WEIXIN_APP_SECRET}"
-        return weixin_login(req, response, token_url)
+        return weixin_login(req, response, token_url, WEIXIN_APP_ID)
     }
 
     /**
