@@ -64,14 +64,14 @@ class ThirdloginController extends BaseController {
      * @param req
      */
     def qq(HttpServletRequest req, HttpServletResponse response) {
-        logger.debug('Received qq params is {}',req.getParameterMap())
+        logger.info('Received qq params is {}',req.getParameterMap())
         String appId = ServletRequestUtils.getStringParameter(req, "app_id", QQ_APP_ID)
         String key = QQ_APP_ID_KEYS[appId]
         return qq_login(req, response, appId, key)
     }
 
     def qq_pc(HttpServletRequest req, HttpServletResponse response) {
-        logger.debug('Received qq params is {}',req.getParameterMap())
+        logger.info('Received qq params is {}',req.getParameterMap())
         String appId = ServletRequestUtils.getStringParameter(req, "app_id", QQ_APP_PC_ID)
         String key = QQ_APP_ID_KEYS[appId]
         return qq_login(req, response, appId, key)
@@ -160,7 +160,7 @@ class ThirdloginController extends BaseController {
      * @return
      */
     private qq_login(HttpServletRequest req, HttpServletResponse response, String app_id, String app_key) {
-        logger.debug('Receive qq_login params req is {},app_id is {},app_key is {}', req.getParameterMap(), app_id, app_key)
+        logger.info('Receive qq_login params req is {},app_id is {},app_key is {}', req.getParameterMap(), app_id, app_key)
         def back_url = req["url"]
         def code = req["code"]
         def access_token = req["access_token"]
