@@ -228,9 +228,7 @@ class ThirdloginController extends BaseController {
         }
         //PC端转跳
         if(StringUtils.isNotEmpty(back_url)) {
-            logger.info('================>before:' + back_url)
             back_url = getRedirectByBackUrl(back_url, user['token'] as String)
-            logger.info('================>after:' + back_url)
             response.sendRedirect(back_url)
             return
         }
