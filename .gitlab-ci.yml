@@ -8,24 +8,42 @@ build_staging :
           - echo "java Build..."
           ##- cd projects/star-user/
           - mvn clean package -U -P product -Dmaven.test.skip=true
-          - md5sum target/star-user.war |awk '{print $1}' > target/star-user.war.md5
-          ##- rsync -av target/star-user.war webserver@192.168.31.236:~/star-user/
-          ##- ssh webserver@192.168.31.236  "source /etc/profile;cd ~/star-user;rm -rf bak.webapp && mv -f webapp bak.webapp;unzip star-user.war -d webapp;./restart.sh"
-    artifacts :
-        paths :
-            - target/star-user.wa*
-        expire_in : 5 mins
+          - rsync -av target/star-user.war webserver@192.168.2.9:~/wa-user/
+          - rsync -av target/star-user.war webserver@192.168.2.10:~/wa-user/
+          - ssh webserver@192.168.2.9  "source /etc/profile;cd ~/wa-user;rm -rf bak.webapp && mv -f webapp bak.webapp;unzip star-user.war -d webapp;./restart.sh"
+          - ssh webserver@192.168.2.10  "source /etc/profile;cd ~/wa-user;rm -rf bak.webapp && mv -f webapp bak.webapp;unzip star-user.war -d webapp;./restart.sh"
     only :
         - master
     tags :
         - java-shell
-deploy_fabo :
-    stage : deploy
-    script :
-        - pwd 
-        - /opt/ci-shell/2.0/to-git --rsync-from=$CI_PROJECT_DIR/target/  --git-repository=online/aiwan.user.api.com.git  --clean=false
-    only :
-        - master
-    tags :
-        - java-shell
+#stages :
+#    - build
+#    - deploy
+#build_staging :
+#    stage: build
+#    script:
+#          - source /etc/profile
+#          - echo "java Build..."
+#          ##- cd projects/star-user/
+#          - mvn clean package -U -P product -Dmaven.test.skip=true
+#          - md5sum target/star-user.war |awk '{print $1}' > target/star-user.war.md5
+#          ##- rsync -av target/star-user.war webserver@192.168.31.236:~/star-user/
+#          ##- ssh webserver@192.168.31.236  "source /etc/profile;cd ~/star-user;rm -rf bak.webapp && mv -f webapp bak.webapp;unzip star-user.war -d webapp;./restart.sh"
+#    artifacts :
+#        paths :
+#            - target/star-user.wa*
+#        expire_in : 5 mins
+#    only :
+#        - master
+#    tags :
+#        - java-shell
+#deploy_fabo :
+#    stage : deploy
+#    script :
+#        - pwd
+#        - /opt/ci-shell/2.0/to-git --rsync-from=$CI_PROJECT_DIR/target/  --git-repository=online/aiwan.user.api.com.git  --clean=false
+#    only :
+#        - master
+#    tags :
+#        - java-shell
     
