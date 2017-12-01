@@ -34,13 +34,13 @@
         <log.target>stdout</log.target>
         <log.web.level>DEBUG</log.web.level>
         <pic.domain>https://aiimg.sumeme.com/</pic.domain>
-        <api.domain>http://aiuser.memeyule.com/</api.domain>
-        <site.domain>http://aiuser.memeyule.com/</site.domain>
+        <api.domain>http://user.17laihou.com/</api.domain>
+        <site.domain>http://www.17laihou.com/</site.domain>
         <pic.folder>c:/upload/</pic.folder>
 
         <buss.thread.minSize>100</buss.thread.minSize>
         <buss.thread.maxSize>200</buss.thread.maxSize>
-        <redis.host>192.168.1.100</redis.host>
+        <redis.host>192.168.2.27</redis.host>
         <redis.port>6385</redis.port>
         <redis.timeout>15000</redis.timeout>
         <redis.pool.maxActive>100</redis.pool.maxActive>
@@ -57,10 +57,10 @@
             <id>testLocal</id>
             <properties>
                 <redis.port>6379</redis.port>
-                <redis.host>192.168.31.246</redis.host>
-                <mongo.uri>192.168.31.231:20000,192.168.31.236:20000,192.168.31.231:20001</mongo.uri>
-                <mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write>
-                <api.domain>http://test-aiuser.memeyule.com/</api.domain>
+                <redis.host>192.168.2.27</redis.host>
+                <mongo.uri>192.168.2.27:10000</mongo.uri>
+                <mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>
+                <api.domain>http://test-user.17laihou.com/</api.domain>
             </properties>
 
             <activation>
@@ -79,7 +79,7 @@
         <profile>
             <id>test</id>
             <properties>
-                <redis.host>192.168.31.236</redis.host>
+                <redis.host>192.168.2.27</redis.host>
                 <redis.port>6379</redis.port>
                 <buss.thread.minSize>40</buss.thread.minSize>
                 <buss.thread.maxSize>50</buss.thread.maxSize>
@@ -88,20 +88,20 @@
                 <log.web.level>DEBUG</log.web.level>
                 <groovy-scope>provided</groovy-scope>
                 <aspectj-scope>provided</aspectj-scope>
-                <pic.domain>http://test.aiimg.sumeme.com/</pic.domain>
-                <api.domain>http://test-aiuser.memeyule.com/</api.domain>
+                <pic.domain>http://test.img.sumeme.com/</pic.domain>
+                <api.domain>http://test-user.17laihou.com/</api.domain>
                 <site.domain>http://www.17laihou.com/</site.domain>
                 <!-- replset-->
-                <mongo.uri>192.168.31.231:20000,192.168.31.236:20000,192.168.31.231:20001</mongo.uri>
-                <mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write>
+                <mongo.uri>192.168.2.27:10000</mongo.uri>
+                <mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>
             </properties>
         </profile>
 
         <profile>
             <id>product</id>
             <properties>
-                <redis.host>192.168.2.15</redis.host>
-                <redis.port>6382</redis.port>
+                <redis.host>192.168.2.16</redis.host>
+                <redis.port>6380</redis.port>
                 <redis.pool.maxActive>200</redis.pool.maxActive>
                 <redis.pool.maxIdle>200</redis.pool.maxIdle>
                 <redis.pool.maxWait>-1</redis.pool.maxWait>
@@ -113,7 +113,7 @@
                 <groovy-scope>provided</groovy-scope>
                 <aspectj-scope>provided</aspectj-scope>
                 <!-- replset-->
-                <mongo.uri>192.168.2.17:10000,192.168.2.18:10000,192.168.2.19:10000</mongo.uri>
+                <mongo.uri>192.168.2.17:20000,192.168.2.18:20000,192.168.2.19:20000</mongo.uri>
                 <mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write>
             </properties>
         </profile>
