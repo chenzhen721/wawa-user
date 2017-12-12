@@ -11,6 +11,7 @@ build_staging :
           - rsync -av target/star-user.war webserver@192.168.2.9:~/wa-user/
           - rsync -av target/star-user.war webserver@192.168.2.10:~/wa-user/
           - ssh webserver@192.168.2.9  "source /etc/profile;cd ~/wa-user;rm -rf bak.webapp && mv -f webapp bak.webapp;unzip star-user.war -d webapp;./restart.sh"
+          - ssh webserver@192.168.2.9  "sleep 2m"
           - ssh webserver@192.168.2.10  "source /etc/profile;cd ~/wa-user;rm -rf bak.webapp && mv -f webapp bak.webapp;unzip star-user.war -d webapp;./restart.sh"
     only :
         - master
