@@ -29,7 +29,7 @@ class Controller extends BaseController {
     private static final Integer FROM_TYPE_WEB = 1
 
     /**
-     * 手机登陆
+     * 手机登陆 login
      * @param req
      * @return
      */
