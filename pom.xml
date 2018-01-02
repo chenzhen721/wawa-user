@@ -71,7 +71,7 @@
                     <groupId>org.codehaus.groovy</groupId>
                     <artifactId>groovy-all</artifactId>
                     <version>${groovy-all-compiler-version}</version>
-                    <scope>runtime</scope>
+                    <scope>compile</scope>
                 </dependency>
             </dependencies>
         </profile>
