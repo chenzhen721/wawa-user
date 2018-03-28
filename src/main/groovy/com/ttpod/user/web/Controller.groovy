@@ -1,17 +1,18 @@
 package com.ttpod.user.web
 
 import com.mongodb.DBObject
-import com.ttpod.rest.anno.Rest
-import com.ttpod.user.model.Code
+import com.wawa.base.BaseController
+import com.wawa.base.anno.Rest
+import com.wawa.model.Code
 import org.apache.commons.lang.StringUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import javax.servlet.http.HttpServletRequest
 
-import static com.ttpod.rest.common.doc.MongoKey._id
-import static com.ttpod.rest.common.util.MsgDigestUtil.MD5
-import static com.ttpod.rest.common.util.WebUtils.$$;
+import static com.wawa.common.util.MsgDigestUtil.MD5
+import static com.wawa.common.util.WebUtils.$$
+import static com.wawa.common.doc.MongoKey._id
 
 /**
  * @author: jiao.li@ttpod.com
@@ -35,8 +36,8 @@ class Controller extends BaseController {
      */
     def login_mobile(HttpServletRequest req) {
         logger.debug('Received login params is {}', req.getParameterMap())
-        def mobile = req['mobile']
-        def pwd = req['pwd']
+        def mobile = req['mobile'] as String
+        def pwd = req['pwd'] as String
 
         if (StringUtils.isBlank(mobile) || StringUtils.isBlank(pwd)) {
             return [code: Code.参数无效]
@@ -62,8 +63,8 @@ class Controller extends BaseController {
      */
     def login_robot(HttpServletRequest req) {
         //手机 用户名 靓号
-        def login_name = req['user_name']
-        def password = req['password']
+        def login_name = req['user_name'] as String
+        def password = req['password'] as String
         if (StringUtils.isBlank(login_name) || StringUtils.isBlank(password)) {
             return [code: Code.参数无效]
         }
@@ -83,7 +84,7 @@ class Controller extends BaseController {
     }
 
     def show(HttpServletRequest req) {
-        def access_token = req['access_token']
+        def access_token = req['access_token'] as String
         if (StringUtils.isBlank(access_token)) {
             return [code: Code.参数无效]
         }

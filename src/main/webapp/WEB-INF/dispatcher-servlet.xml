@@ -61,7 +61,7 @@
             <!--</list>-->
         <!--</property>-->
     <!--</bean>-->
-    <bean id="sessionInterceptor" class="com.ttpod.user.web.interceptor.OAuth2SimpleInterceptor"
+    <bean id="sessionInterceptor" class="com.wawa.api.interceptor.OAuth2SimpleInterceptor"
             p:mainMongo-ref="userMongo" p:mainRedis-ref="mainRedis" />
 
 

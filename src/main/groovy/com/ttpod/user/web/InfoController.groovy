@@ -1,10 +1,11 @@
 package com.ttpod.user.web
 
 import com.mongodb.DBObject
-import com.ttpod.rest.anno.Rest
-import com.ttpod.user.model.Code
-import com.ttpod.user.model.SmsCode
-import com.ttpod.user.web.api.Web
+import com.wawa.base.BaseController
+import com.wawa.base.anno.Rest
+import com.wawa.model.Code
+import com.wawa.model.SmsCode
+import com.wawa.api.Web
 import org.apache.commons.lang.StringUtils
 import org.apache.commons.lang.math.NumberUtils
 import org.slf4j.Logger
@@ -13,10 +14,10 @@ import org.springframework.web.bind.ServletRequestUtils
 
 import javax.servlet.http.HttpServletRequest
 
-import static com.ttpod.rest.common.doc.MongoKey.$set
-import static com.ttpod.rest.common.doc.MongoKey._id
-import static com.ttpod.rest.common.util.MsgDigestUtil.MD5
-import static com.ttpod.rest.common.util.WebUtils.$$;
+import static com.wawa.common.util.MsgDigestUtil.MD5
+import static com.wawa.common.util.WebUtils.$$
+import static com.wawa.common.doc.MongoKey._id
+import static com.wawa.common.doc.MongoKey.$set
 /**
  * @author: jiao.li@ttpod.com
  * Date: 14-6-16 下午1:39
@@ -35,9 +36,9 @@ class InfoController extends BaseController {
      */
     def synNo(HttpServletRequest req) {
         //手机 用户名 靓号
-        def id = req['tuid']
-        def mm_no = req['mm_no']
-        String sign = req['sign']
+        def id = req['tuid'] as String
+        def mm_no = req['mm_no'] as String
+        String sign = req['sign'] as String
 
         if(StringUtils.isEmpty(id) || StringUtils.isEmpty(mm_no)){
             return [code: Code.参数无效]
@@ -58,11 +59,11 @@ class InfoController extends BaseController {
      */
     def bindMobile(HttpServletRequest req){
         logger.debug('Received bindMobile params is {}',req.getParameterMap())
-        def id = req['tuid']
-        def token = req['access_token']
-        def mobile = req['mobile']
-        def sms_code = req['sms_code']
-        def pwd = req['pwd']
+        def id = req['tuid'] as String
+        def token = req['access_token'] as String
+        def mobile = req['mobile'] as String
+        def sms_code = req['sms_code'] as String
+        def pwd = req['pwd'] as String
 
         if(StringUtils.isBlank(mobile) || StringUtils.isBlank(sms_code) || StringUtils.isBlank(token)){
             return [code: Code.参数无效]
@@ -112,9 +113,9 @@ class InfoController extends BaseController {
      * 解除绑定手机号
      */
     def unbindMobile(HttpServletRequest req){
-        def id = req['tuid']
-        def token = req['access_token']
-        def sms_code = req['sms_code']
+        def id = req['tuid'] as String
+        def token = req['access_token'] as String
+        def sms_code = req['sms_code'] as String
 
         if(StringUtils.isEmpty(id) || StringUtils.isEmpty(sms_code) ||
                 StringUtils.isEmpty(token)){
@@ -153,9 +154,9 @@ class InfoController extends BaseController {
      * 绑定用户名
      */
     def bindUserName(HttpServletRequest req){
-        def token = req['access_token']
-        def user_name = req['username']
-        def pwd = req['pwd']
+        def token = req['access_token'] as String
+        def user_name = req['username'] as String
+        def pwd = req['pwd'] as String
         if(StringUtils.isEmpty(user_name) ||StringUtils.isEmpty(token)){
             return [code: Code.参数无效]
         }
@@ -191,9 +192,9 @@ class InfoController extends BaseController {
      * 绑定邮箱
      */
     def bindUserEmail(HttpServletRequest req){
-        def token = req['access_token']
-        def email = req['email']
-        def pwd = req['pwd']
+        def token = req['access_token'] as String
+        def email = req['email'] as String
+        def pwd = req['pwd'] as String
         if(StringUtils.isEmpty(email) ||StringUtils.isEmpty(token)){
             return [code: Code.参数无效]
         }
@@ -232,9 +233,9 @@ class InfoController extends BaseController {
      */
     def verify_code(HttpServletRequest req) {
         Integer type = ServletRequestUtils.getIntParameter(req, "type", 1)
-        def id = req['tuid']
-        def token = req['access_token']
-        def sms_code = req['sms_code']
+        def id = req['tuid'] as String
+        def token = req['access_token'] as String
+        def sms_code = req['sms_code'] as String
         def userId = null
         if(StringUtils.isNotEmpty(id)){
             userId =  NumberUtils.isNumber(id.toString()) ? id as Integer : id as String

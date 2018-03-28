@@ -1,15 +1,14 @@
 package com.ttpod.user.web
 
-import com.Geetest.util.GeetestUtils
-import com.ttpod.user.common.msg.HttpSender
-import com.ttpod.rest.anno.Rest
-import com.ttpod.user.common.msg.MontnetSmsUtil
-import com.ttpod.user.common.util.AuthCode
-import com.ttpod.user.common.util.KeyUtils
-import com.ttpod.user.model.Code
-import com.ttpod.user.model.SmsChannel
-import com.ttpod.user.model.SmsCode
-import com.ttpod.user.web.api.Web
+import com.wawa.base.BaseController
+import com.wawa.base.anno.Rest
+import com.wawa.common.msg.HttpSender
+import com.wawa.common.util.AuthCode
+import com.wawa.common.util.KeyUtils
+import com.wawa.model.Code
+import com.wawa.model.SmsChannel
+import com.wawa.model.SmsCode
+import com.wawa.api.Web
 import org.apache.commons.lang.StringUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -19,7 +18,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import java.util.concurrent.TimeUnit
 
-import static com.ttpod.rest.common.util.WebUtils.$$;
+import static com.wawa.common.util.WebUtils.$$
 
 /**
  * @author: jiao.li@ttpod.com
@@ -57,28 +56,6 @@ class AuthCodeController extends BaseController {
         }
     }
 
-    /**
-     * 获取验证码(极验证 or 么么验证码)
-     * @param req
-     * @return
-     */
-    def geettest(HttpServletRequest req){
-        Boolean isPc = ServletRequestUtils.getBooleanParameter(req, 'pc', Boolean.FALSE)
-        Map resutl = GeetestUtils.generate_captcha(isPc)
-        resutl.putAll([code : 1, data: [is_open : GeetestUtils.OPEN_GEETEST]]);
-        //resutl.putAll([code : 1, data: [is_open : Boolean.FALSE]]);
-        return resutl
-    }
-
-    /**
-     * 验证码是否正确
-     * @param req
-     * @return
-     */
-    def validate_authcode(HttpServletRequest req){
-        return [code : 1, data: [validate: Web.codeVeri(req)]] ;
-    }
-
     private static final Long SEND_MOBILE_LIMIT = 60
     private static final Long SEND_MOBILE_EXPIRES= 10 * 60L
     private static final String SMS_SEND_CONTENT="正在进行手机验证操作，验证码：{code}。请勿将验证码泄露给他人。"
@@ -90,7 +67,7 @@ class AuthCodeController extends BaseController {
     def send_mobile(HttpServletRequest req) {
         logger.debug('Received send_mobile params is {}',req.getParameterMap())
         def length = ServletRequestUtils.getIntParameter(req,'length',0)
-        def mobile = req['mobile']
+        def mobile = req['mobile'] as String
         //
         Integer type = ServletRequestUtils.getIntParameter(req, "type", SmsCode.登录.ordinal())
         if(StringUtils.isEmpty(mobile)){
@@ -129,9 +106,9 @@ class AuthCodeController extends BaseController {
             return [code : Code.短信验证码每日次数超过限制]
 
         //if(!sendMobile(req, key, mobile, content, length, (limit%2))){
-        if(!sendMobile(req, key, mobile, content, length, SmsChannel.创蓝.ordinal())){
+        /*if(!sendMobile(req, key, mobile, content, length, SmsChannel.创蓝.ordinal())){
             [code: Code.ERROR]
-        }
+        }*/
         [code: Code.OK]
     }
 
@@ -211,7 +188,7 @@ class AuthCodeController extends BaseController {
      * @param channel 多短信频道 1创蓝 0梦网
      * @return
      */
-    public Boolean sendMobile(HttpServletRequest req, String key, String mobile, String content, Integer length, Integer channel){
+    /*public Boolean sendMobile(HttpServletRequest req, String key, String mobile, String content, Integer length, Integer channel){
         def authLength = length == 1 ? 4 : 6
         def code = AuthCode.randomNumber(authLength)
         mainRedis.opsForValue().set(key, code, SEND_MOBILE_EXPIRES, TimeUnit.SECONDS)
@@ -246,7 +223,7 @@ class AuthCodeController extends BaseController {
             return Boolean.FALSE
         }
         return Boolean.FALSE
-    }
+    }*/
 
     /**
      * 通过手机号获得验证码
@@ -270,7 +247,7 @@ class AuthCodeController extends BaseController {
      * 用户活跃测试验证 检测是否为僵尸（挂机）用户
      *
      */
-    def user_validate(HttpServletRequest req){
+    /*def user_validate(HttpServletRequest req){
         def id = req['id']  as Integer
         if(id == null) return Web.missParam();
         //验证通过
@@ -280,7 +257,7 @@ class AuthCodeController extends BaseController {
             return [code : 1]
         }
         return [code : Code.验证码验证失败]
-    }
+    }*/
 
 
 }

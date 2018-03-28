@@ -1,12 +1,13 @@
 package com.ttpod.user.web
 
 import com.mongodb.DBObject
-import com.ttpod.rest.anno.Rest
-import com.ttpod.user.common.util.AuthCode
-import com.ttpod.user.common.util.KeyUtils
-import com.ttpod.user.model.Code
-import com.ttpod.user.model.SmsCode
-import com.ttpod.user.web.api.Web
+import com.wawa.base.BaseController
+import com.wawa.base.anno.Rest
+import com.wawa.common.util.AuthCode
+import com.wawa.common.util.KeyUtils
+import com.wawa.model.Code
+import com.wawa.model.SmsCode
+import com.wawa.api.Web
 import org.apache.commons.lang.StringUtils
 import org.apache.commons.lang.math.NumberUtils
 import org.slf4j.Logger
@@ -17,9 +18,9 @@ import javax.annotation.Resource
 import javax.servlet.http.HttpServletRequest
 import java.util.concurrent.TimeUnit
 
-import static com.ttpod.rest.common.doc.MongoKey._id
-import static com.ttpod.rest.common.util.MsgDigestUtil.MD5
-import static com.ttpod.rest.common.util.WebUtils.$$
+import static com.wawa.common.util.MsgDigestUtil.MD5
+import static com.wawa.common.util.WebUtils.$$
+import static com.wawa.common.doc.MongoKey._id
 
 /**
  * @author: jiao.li@ttpod.com
@@ -37,9 +38,9 @@ class PwdController extends BaseController {
      */
     def find(HttpServletRequest req) {
         logger.debug('Received find params is {}',req.getParameterMap())
-        def mobile = req['mobile']
-        def sms_code = req['sms_code']
-        def pwd = req['pwd']
+        def mobile = req['mobile'] as String
+        def sms_code = req['sms_code'] as String
+        def pwd = req['pwd'] as String
         if(StringUtils.isBlank(mobile) || StringUtils.isBlank(sms_code) || StringUtils.isBlank(pwd)){
             return [code: Code.参数无效]
         }
@@ -74,9 +75,9 @@ class PwdController extends BaseController {
      * @param req
      */
     def change(HttpServletRequest req) {
-        def token = req['access_token']
-        def oldpwd = req['oldpwd']
-        def newpwd = req['newpwd']
+        def token = req['access_token'] as String
+        def oldpwd = req['oldpwd'] as String
+        def newpwd = req['newpwd'] as String
 
         if(StringUtils.isEmpty(token) || StringUtils.isEmpty(oldpwd) ||
                 StringUtils.isEmpty(newpwd)){
@@ -115,9 +116,9 @@ class PwdController extends BaseController {
      * @return
      */
     def reset(HttpServletRequest req) {
-        def mm_no = req['uid']
-        def newpwd = req['pwd']
-        def sign = req['s']
+        def mm_no = req['uid'] as String
+        def newpwd = req['pwd'] as String
+        def sign = req['s'] as String
 
         if(StringUtils.isEmpty(mm_no) || StringUtils.isEmpty(newpwd) ||
                 StringUtils.isEmpty(sign)){
@@ -196,7 +197,7 @@ class PwdController extends BaseController {
         Integer userId = null
         String qd_userId = id
         if(id.isNumber())
-            userId = req.getInt(_id)
+            userId = ServletRequestUtils.getIntParameter(req, _id)
         String sign = req['sign']
 
         def needSign = MD5.digest2HEX("${PRIV_KEY}&userId=${id}".toString())

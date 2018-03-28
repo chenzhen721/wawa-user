@@ -2,7 +2,7 @@ package test
 
 import com.ttpod.rest.groovy.WebSupport
 import com.ttpod.rest.web.StaticSpring
-import com.ttpod.user.web.interceptor.OAuth2SimpleInterceptor
+import com.wawa.api.interceptor.OAuth2SimpleInterceptor
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
