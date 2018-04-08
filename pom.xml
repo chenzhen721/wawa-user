@@ -67,10 +67,10 @@
             <id>testLocal</id>
             <properties>
                 <redis.port>6379</redis.port>
-                <redis.host>192.168.2.27</redis.host>
-                <mongo.uri>192.168.2.27:10000</mongo.uri>
+                <redis.host>127.0.0.1</redis.host>
+                <mongo.uri>127.0.0.1:27017</mongo.uri>
                 <mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>
-                <api.domain>http://test-user.17laihou.com/</api.domain>
+                <api.domain>http://localhost:9002/</api.domain>
             </properties>
 
             <activation>
@@ -89,7 +89,7 @@
         <profile>
             <id>test</id>
             <properties>
-                <redis.host>192.168.2.27</redis.host>
+                <redis.host>172.18.78.183</redis.host>
                 <redis.port>6379</redis.port>
                 <buss.thread.minSize>40</buss.thread.minSize>
                 <buss.thread.maxSize>50</buss.thread.maxSize>
@@ -99,10 +99,10 @@
                 <groovy-scope>provided</groovy-scope>
                 <aspectj-scope>provided</aspectj-scope>
                 <pic.domain>http://test.img.sumeme.com/</pic.domain>
-                <api.domain>http://test-user.17laihou.com/</api.domain>
-                <site.domain>http://www.17laihou.com/</site.domain>
+                <api.domain>http://test-user.doll520.com/</api.domain>
+                <site.domain>http://test.doll520.com/</site.domain>
                 <!-- replset-->
-                <mongo.uri>192.168.2.27:10000</mongo.uri>
+                <mongo.uri>172.18.78.183:27017</mongo.uri>
                 <mongo.cost.write>ACKNOWLEDGED</mongo.cost.write>
             </properties>
         </profile>
@@ -127,6 +127,7 @@
                 <mongo.cost.write>REPLICA_ACKNOWLEDGED</mongo.cost.write>
             </properties>
         </profile>
+
         <profile>
             <id>slf4j</id>
             <activation>

@@ -34,7 +34,7 @@
     <bean id="kgsUniqueRedis" class="org.springframework.data.redis.core.StringRedisTemplate"
           p:connectionFactory-ref="kgsConnectionFactory" />
 
-    <bean id="userKGS" class="com.ttpod.rest.persistent.SimpleKGS"
+    <bean id="userKGS" class="com.wawa.base.persistent.SimpleKGS"
           p:nameSpace="user"
           p:offset="10000002"
           p:kgsRedis-ref="kgsUniqueRedis"/>

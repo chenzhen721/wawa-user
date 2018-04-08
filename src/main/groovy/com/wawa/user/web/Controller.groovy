@@ -1,4 +1,4 @@
-package com.ttpod.user.web
+package com.wawa.user.web
 
 import com.mongodb.DBObject
 import com.wawa.base.BaseController
@@ -36,8 +36,8 @@ class Controller extends BaseController {
      */
     def login_mobile(HttpServletRequest req) {
         logger.debug('Received login params is {}', req.getParameterMap())
-        def mobile = req['mobile'] as String
-        def pwd = req['pwd'] as String
+        def mobile = req.getParameter('mobile')
+        def pwd = req.getParameter('pwd') as String
 
         if (StringUtils.isBlank(mobile) || StringUtils.isBlank(pwd)) {
             return [code: Code.参数无效]
@@ -63,8 +63,8 @@ class Controller extends BaseController {
      */
     def login_robot(HttpServletRequest req) {
         //手机 用户名 靓号
-        def login_name = req['user_name'] as String
-        def password = req['password'] as String
+        def login_name = req.getParameter('user_name') as String
+        def password = req.getParameter('password') as String
         if (StringUtils.isBlank(login_name) || StringUtils.isBlank(password)) {
             return [code: Code.参数无效]
         }
@@ -84,7 +84,7 @@ class Controller extends BaseController {
     }
 
     def show(HttpServletRequest req) {
-        def access_token = req['access_token'] as String
+        def access_token = req.getParameter('access_token') as String
         if (StringUtils.isBlank(access_token)) {
             return [code: Code.参数无效]
         }
@@ -92,10 +92,16 @@ class Controller extends BaseController {
         if (user == null)
             return [code: Code.ERROR]
 
-        def user_name = user['user_name'] ?: user['mobile'] ?: user['nickname']
-        def nickname = user['nickname']
-        def mobile_bind = StringUtils.isNotEmpty((user['mobile'] ?: "") as String)
-        def uname_bind = StringUtils.isNotEmpty((user['user_name'] ?: "") as String)
+        String user_name = user['user_name'] as String
+        if (StringUtils.isBlank(user_name)) {
+            user_name = user['mobile'] as String
+        }
+        if (StringUtils.isBlank(user_name)) {
+            user_name = user['nickname'] as String
+        }
+        def nickname = user['nickname'] as String
+        def mobile_bind = StringUtils.isNotEmpty(user['mobile'] as String)
+        def uname_bind = StringUtils.isNotEmpty(user['user_name'] as String)
         [code: Code.OK, data: [tuid       : user['_id'], user_name: user_name, uname_bind: uname_bind, nickname: nickname, email: user['email'],
                                mobile_bind: mobile_bind, via: user['via'], pic: user['pic'], mobile: user['mobile'], invite_code: user['invite_code']]]
     }

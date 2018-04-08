@@ -42,11 +42,11 @@
             <MaxFileSize>8192KB</MaxFileSize>
         </triggeringPolicy>
     </appender>
-    <logger name="com.ttpod.user.web.AuthCodeController" level="INFO">
+    <logger name="com.wawa.user.web.AuthCodeController" level="INFO">
         <appender-ref ref="msg"/>
     </logger>
-    <logger name="com.ttpod.user.web.spring" level="INFO"/>
-    <logger name="com.ttpod.user.web" level="${log.web.level}"/>
+    <logger name="com.wawa.service.spring" level="INFO"/>
+    <logger name="com.wawa.user.web" level="${log.web.level}"/>
     <root level="INFO">
         <appender-ref ref="${log.target}"/>
     </root>

@@ -1,4 +1,4 @@
-package com.ttpod.user.web
+package com.wawa.user.web
 
 import com.mongodb.DBObject
 import com.wawa.base.BaseController
@@ -70,6 +70,25 @@ class ThirdloginController extends BaseController {
         return qq_login(req, response, appId, key)
     }
 
+    def redirect(HttpServletRequest req, HttpServletResponse response) {
+        logger.info('redirect params:', req.getParameterMap())
+        def redirect = req.getParameter('redirect_uri')
+        response.sendRedirect(redirect)
+    }
+
+    def qq_test(HttpServletRequest req, HttpServletResponse response) {
+        logger.info('Received qq params is {}',req.getParameterMap())
+        def back_url = req.getParameter('url')
+        def token = '934da9b386f323437fabe0e616090b2e'
+        //PC端转跳
+        if(StringUtils.isNotEmpty(back_url)) {
+            back_url = getRedirectByBackUrl(back_url, token)
+            response.sendRedirect(back_url)
+            return
+        }
+        return [code: Code.OK, data: [token: token, first_login: true,'openid':'o_MKO0ivop0CW1qGm2A1zS02PnnY']]
+    }
+
     def qq_pc(HttpServletRequest req, HttpServletResponse response) {
         logger.info('Received qq params is {}',req.getParameterMap())
         String appId = ServletRequestUtils.getStringParameter(req, "app_id", QQ_APP_PC_ID)
@@ -101,8 +120,8 @@ class ThirdloginController extends BaseController {
      */
     def weixin_code_redirect(HttpServletRequest req, HttpServletResponse response){
         logger.debug('Received weixin_login params req is {}.', req.getParameterMap())
-        def code = req["code"] as String
-        def back_url = req["url"] as String
+        def code = req.getParameter('code')
+        def back_url = req.getParameter('url')
         if(StringUtils.isNotEmpty(code) && StringUtils.isNotEmpty(back_url)) {
             //response.sendRedirect(back_url + "?access_token=${user['token']}")
             back_url = back_url+(back_url.contains("?") ? "&" : "?")
@@ -124,8 +143,8 @@ class ThirdloginController extends BaseController {
      */
     def weixin_code_cache(HttpServletRequest req){
         logger.debug('Received weixin_code_cache params req is {}.', req.getParameterMap())
-        def code = req["code"] as String
-        def _id = req['_id'] as String
+        def code = req.getParameter('code')
+        def _id = req.getParameter('_id')
         if (users().count($$(mm_no: '' + _id)) <= 0) {
             return [code: 0]
         }
@@ -141,8 +160,8 @@ class ThirdloginController extends BaseController {
      */
     def get_weixin_id(HttpServletRequest req) {
         logger.debug('Received weixin_code params req is {}.', req.getParameterMap())
-        def _id = req['_id'] as String
-        def app_id = req['app_id'] as String
+        def _id = req.getParameter('_id')
+        def app_id = req.getParameter('app_id')
         def key = 'weixin.' + app_id
         def user = users().findOne($$(mm_no: '' + _id).append(key, [$exists: true]))
         if (user == null) {
@@ -161,9 +180,9 @@ class ThirdloginController extends BaseController {
      */
     private qq_login(HttpServletRequest req, HttpServletResponse response, String app_id, String app_key) {
         logger.info('Receive qq_login params req is {},app_id is {},app_key is {}', req.getParameterMap(), app_id, app_key)
-        def back_url = req["url"] as String
-        def code = req["code"] as String
-        def access_token = req["access_token"] as String
+        def back_url = req.getParameter('url')
+        def code = req.getParameter('code')
+        def access_token = req.getParameter('access_token')
 
         if (StringUtils.isBlank(code) && StringUtils.isBlank(access_token)) {
             return [code: Code.参数无效]
@@ -246,10 +265,10 @@ class ThirdloginController extends BaseController {
      */
     private weixin_login(HttpServletRequest req, HttpServletResponse response, String token_url, String app_id) {
         logger.debug('Received weixin_login params req is {}.token_url is {}', req.getParameterMap(), token_url)
-        def openid = req['openid'] as String
-        def code = req['code'] as String
-        def back_url = req["url"] as String
-        def access_token = req['access_token'] as String
+        def openid = req.getParameter('openid')
+        def code = req.getParameter('code')
+        def back_url = req.getParameter("url")
+        def access_token = req.getParameter('access_token')
         def first_login = Boolean.FALSE
 
         if (StringUtils.isBlank(code) && StringUtils.isBlank(access_token)) {
@@ -257,7 +276,7 @@ class ThirdloginController extends BaseController {
         }
 
         if(StringUtils.isNotBlank(code) && StringUtils.isEmpty(access_token)){
-            token_url =  token_url+"&code=${code}"
+            token_url =  "${token_url}&code=${code}".toString()
             logger.debug("weixin login token_url: {}",token_url)
             String resp = HttpClientUtils.get(token_url, null)
             Map respMap = JSONUtil.jsonToMap(resp)
@@ -270,7 +289,7 @@ class ThirdloginController extends BaseController {
             return [code: Code.参数无效]
         }
 
-        def userInfo_url = WEIXIN_URL + "userinfo?access_token=${access_token}&openid=${openid}"
+        def userInfo_url = "${WEIXIN_URL}userinfo?access_token=${access_token}&openid=${openid}".toString()
         String userInfoResp = HttpClientUtils.get(userInfo_url, null)
         Map<String, Object> userInfoMaps = JSONUtil.jsonToMap(userInfoResp)
         logger.debug("weixin login userInfoMaps: {}", userInfoMaps)
@@ -290,7 +309,7 @@ class ThirdloginController extends BaseController {
             userInfos.put("weixin_openid", openid)
             userInfos.put("weixin_access_token", access_token)
             userInfos.put("weixin_unionid", unionId)
-            userInfos.put("pic", userInfoMaps['headimgurl'] ?: "")
+            userInfos.put("pic", StringUtils.isBlank(userInfoMaps['headimgurl'] as String) ? "" : userInfoMaps['headimgurl'])
             userInfos.put("nickname", userInfoMaps['nickname'])
             userInfos.put("via", "weixin")
             def map = new HashMap()
@@ -355,13 +374,14 @@ class ThirdloginController extends BaseController {
      * @return
      */
     private static String getRedirectByBackUrl(String back_url, String token) {
-        back_url = back_url + (back_url.contains("?") ? "&" : "?")
+        String a = (back_url.contains("?") ? '&' : '?') as String
+        back_url = back_url + a
         back_url = URLDecoder.decode(back_url, "UTF-8");
         logger.debug("back_url origin :{}", back_url)
         if (StringUtils.contains(back_url, TOKEN_FIELD)) {
             back_url = back_url.replace(TOKEN_FIELD, token)
         } else {
-            back_url = back_url + "access_token=${token}"
+            back_url = "${back_url}access_token=${token}"
         }
         logger.debug("back_url after replace :{}", back_url)
         return back_url

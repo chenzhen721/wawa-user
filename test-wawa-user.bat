@@ -23,6 +23,6 @@ if %ERRORLEVEL% EQU 0 (
 exit
 
 :pubApi
-scp target/wawa-user.war webserver@%~1:~/test-wawa-user
-ssh mlsty@%~1  "source /etc/profile;cd ~/test-wawa-user;rm -rf bak.webapp && mv -f webapp bak.webapp;unzip wawa-user.war -d webapp;./restart.sh"
+scp target/wawa-user.war mlsty@%~1:~/test-wawa-user
+ssh mlsty@%~1  "source /etc/profile;cd ~/test-wawa-user;rm -rf bak.webapp && mv -f webapp bak.webapp;unzip wawa-user.war -d webapp;cp ROOT.xml webapp;./restart.sh"
 

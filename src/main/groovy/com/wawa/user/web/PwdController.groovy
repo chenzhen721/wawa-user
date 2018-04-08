@@ -1,4 +1,4 @@
-package com.ttpod.user.web
+package com.wawa.user.web
 
 import com.mongodb.DBObject
 import com.wawa.base.BaseController
@@ -163,7 +163,7 @@ class PwdController extends BaseController {
     //TODO 提供接口给管理后台使用 ==============================
 
     private final static String PRIV_KEY = "meme#*&07071zhibo";
-    private static final String RAN_TOKEN_SEED = "#@#meme"+ new Date().format("yMMdd") +"%xi>YY"
+    private static final String RAN_TOKEN_SEED = "#@#meme${new Date().format("yMMdd")}%xi>YY".toString()
 
     def refresh_token(HttpServletRequest req) {
 
@@ -239,27 +239,6 @@ class PwdController extends BaseController {
         }
 
         return [code : Code.ERROR]
-    }
-
-    @Resource
-    AuthCodeController authCodeController
-    /**
-     * 发送手机验证码
-     * @param req
-     * @return
-     */
-    def send_mobile(HttpServletRequest req) {
-        String mobile = req['mobile']
-        String sign = req['sign']
-        Integer type = ServletRequestUtils.getIntParameter(req, "type", 1)
-        def needSign = MD5.digest2HEX("${PRIV_KEY}&mobile=${mobile}".toString())
-        if(!sign.equals(needSign)){
-            return [code : Code.ERROR]
-        }
-        if(!authCodeController.sendMobile(req, mobile, type)){
-            [code: Code.ERROR]
-        }
-        [code: Code.OK]
     }
 
     /**

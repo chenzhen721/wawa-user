@@ -9,8 +9,8 @@
 
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
-    <!--<context:annotation-config/>-->
-    <!--<context:component-scan base-package="com.ttpod.star.web"/>-->
+    <context:annotation-config/>
+    <context:component-scan base-package="com.wawa.service"/>
 
 
     <!-- the service we want to make cacheable -->

@@ -1,4 +1,4 @@
-package com.ttpod.user.web
+package com.wawa.user.web
 
 import com.mongodb.DBObject
 import com.wawa.base.BaseController

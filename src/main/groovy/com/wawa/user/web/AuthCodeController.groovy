@@ -1,4 +1,4 @@
-package com.ttpod.user.web
+package com.wawa.user.web
 
 import com.wawa.base.BaseController
 import com.wawa.base.anno.Rest
@@ -6,9 +6,9 @@ import com.wawa.common.msg.HttpSender
 import com.wawa.common.util.AuthCode
 import com.wawa.common.util.KeyUtils
 import com.wawa.model.Code
-import com.wawa.model.SmsChannel
 import com.wawa.model.SmsCode
 import com.wawa.api.Web
+import groovy.transform.CompileStatic
 import org.apache.commons.lang.StringUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -21,50 +21,37 @@ import java.util.concurrent.TimeUnit
 import static com.wawa.common.util.WebUtils.$$
 
 /**
- * @author: jiao.li@ttpod.com
- * Date: 14-6-16 下午1:39
  */
 @Rest
 class AuthCodeController extends BaseController {
 
-    Logger logger = LoggerFactory.getLogger(AuthCodeController.class)
+    private Logger logger = LoggerFactory.getLogger(AuthCodeController.class)
 
     def fetch(HttpServletRequest req) {
-        //String key = AuthCode.random(8 + ((int) System.currentTimeMillis() & 1)).toLowerCase()
+//        String key = AuthCode.random(8 + ((int) System.currentTimeMillis() & 1)).toLowerCase()
         String key = System.currentTimeMillis() + AuthCode.random(4);
-        String url = API_DOMAIN + "authcode/image?key=" + key
+//        String key = AuthCode.random(4);
+        String url = "${API_DOMAIN}authcode/image?key=${key}".toString()
         String clientId = Web.getClientId(req);
-        String request_key = req['key']
+        String request_key = req.getParameter('key')
         //logger.info(req.getServletPath()+"request key : {} ip : {}   ", request_key, clientId )
         [code: 1, data: [auth_key: key, auth_url: url]]
     }
 
 
-    def image(HttpServletRequest req, HttpServletResponse response) {
+    /*def image(HttpServletRequest req, HttpServletResponse response) {
         String code = AuthCode.random(4 + ((int) System.currentTimeMillis() & 1))
         String request_key = req['key']
         def key = KeyUtils.AUTHCODE.register(request_key)
         String clientId = Web.getClientId(req);
-        //logger.info("AuthCode image ip : {} request key : {}  code : {}", clientId, request_key, code)
         if(mainRedis.opsForValue().setIfAbsent(key, code)){
             mainRedis.expire(key, 2*60L, TimeUnit.SECONDS)
-            //注册消耗时间
-            /*def cost_time_key = "register:costtime:${code}".toString()
-            mainRedis.opsForValue().set(cost_time_key, System.currentTimeMillis().toString(), 2*60L, TimeUnit.SECONDS)*/
             response.addHeader('Content-Type', "image/png")
             AuthCode.draw(code, 160, 48, response.getOutputStream())
         }
-    }
+    }*/
 
-    private static final Long SEND_MOBILE_LIMIT = 60
-    private static final Long SEND_MOBILE_EXPIRES= 10 * 60L
-    private static final String SMS_SEND_CONTENT="正在进行手机验证操作，验证码：{code}。请勿将验证码泄露给他人。"
-    private static final String SMS_SEND_CONTENT_FIND="正在进行找回密码操作，验证码：{code}。请勿将验证码泄露给他人。"
-    private static final String SMS_SEND_CONTENT_EXCHANGE="正在进行兑换柠檬操作，验证码：{code}。请勿将验证码泄露给他人。"
-    private static final String SMS_SEND_CONTENT_BIND_MOBILE="正在绑定手机号，验证码：{code}。请勿将验证码泄露给他人。"
-
-
-    def send_mobile(HttpServletRequest req) {
+    /*def send_mobile(HttpServletRequest req) {
         logger.debug('Received send_mobile params is {}',req.getParameterMap())
         def length = ServletRequestUtils.getIntParameter(req,'length',0)
         def mobile = req['mobile'] as String
@@ -106,11 +93,8 @@ class AuthCodeController extends BaseController {
             return [code : Code.短信验证码每日次数超过限制]
 
         //if(!sendMobile(req, key, mobile, content, length, (limit%2))){
-        /*if(!sendMobile(req, key, mobile, content, length, SmsChannel.创蓝.ordinal())){
-            [code: Code.ERROR]
-        }*/
         [code: Code.OK]
-    }
+    }*/
 
 
     /**
@@ -120,7 +104,7 @@ class AuthCodeController extends BaseController {
      * @param type
      * @return
      */
-    public Boolean sendMobile(HttpServletRequest req, String mobile, Integer type){
+    /*public Boolean sendMobile(HttpServletRequest req, String mobile, Integer type){
         def key = KeyUtils.AUTHCODE.registerSms(mobile)
         String content = SMS_SEND_CONTENT
         if(type == SmsCode.找回密码.ordinal()){
@@ -130,8 +114,9 @@ class AuthCodeController extends BaseController {
             key = KeyUtils.AUTHCODE.exchangeSms(mobile)
             content = SMS_SEND_CONTENT_EXCHANGE
         }
-        return sendMobile(req, key, mobile, content)
-    }
+//        return sendMobile(req, key, mobile, content)
+        false
+    }*/
 
     /**
      * 2016/7/7 启用
@@ -142,13 +127,13 @@ class AuthCodeController extends BaseController {
      * @param content
      * @return
      */
-    public Boolean sendMobile(HttpServletRequest req, String key, String mobile, String content){
+    /*public Boolean sendMobile(HttpServletRequest req, String key, String mobile, String content){
         return sendMobile(req, key, mobile, content, Boolean.TRUE)
-    }
+    }*/
 
 
 
-    public Boolean sendMobile(HttpServletRequest req, String key, String mobile, String content, Boolean china){
+    /*public Boolean sendMobile(HttpServletRequest req, String key, String mobile, String content, Boolean china){
         // todo 位数由客户端传
         def code = AuthCode.randomNumber(6)
         mainRedis.opsForValue().set(key, code, SEND_MOBILE_EXPIRES, TimeUnit.SECONDS)
@@ -175,7 +160,7 @@ class AuthCodeController extends BaseController {
             return Boolean.FALSE
         }
         return Boolean.FALSE
-    }
+    }*/
 
     /**
      * 重载 发验证码方法
@@ -231,7 +216,7 @@ class AuthCodeController extends BaseController {
      * @param type
      * @return
      */
-    public String getAuthCodeByMobile(String mobile, Integer type){
+    /*public String getAuthCodeByMobile(String mobile, Integer type){
         def key = KeyUtils.AUTHCODE.registerSms(mobile)
         if(type == SmsCode.找回密码.ordinal()){
             key = KeyUtils.AUTHCODE.pwdSms(mobile)
@@ -239,7 +224,7 @@ class AuthCodeController extends BaseController {
             key = KeyUtils.AUTHCODE.exchangeSms(mobile)
         }
         return mainRedis.opsForValue().get(key)
-    }
+    }*/
 
     /**
      * 推送: 参考star-main项目java/push_user_validate
